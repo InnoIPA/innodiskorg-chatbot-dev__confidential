@@ -8,7 +8,8 @@ export const importConfig = async (token: string, config) => {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			Authorization: `Bearer ${token}`
+			Authorization: `Bearer ${token}`,
+			
 		},
 		body: JSON.stringify({
 			config: config

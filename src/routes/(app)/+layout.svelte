@@ -34,6 +34,7 @@
 		banners,
 		showSettings,
 		showChangelog,
+		showCreateChunkModal,
 		temporaryChatEnabled,
 		toolServers
 	} from '$lib/stores';
@@ -44,6 +45,7 @@
 	import AccountPending from '$lib/components/layout/Overlay/AccountPending.svelte';
 	import { get } from 'svelte/store';
 	import Spinner from '$lib/components/common/Spinner.svelte';
+	import CreateChunkModal from '$lib/components/chat/CreateChunkModal.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -236,6 +238,7 @@
 
 <SettingsModal bind:show={$showSettings} />
 <ChangelogModal bind:show={$showChangelog} />
+<CreateChunkModal bind:show={$showCreateChunkModal} />
 
 
 <div class="app relative">

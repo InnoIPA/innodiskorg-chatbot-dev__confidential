@@ -1,6 +1,6 @@
 {
 	"name": "open-webui",
-	"version": "0.4.11",
+	"version": "0.4.12",
 	"private": true,
 	"scripts": {
 		"dev": "npm run pyodide:fetch && vite dev --host",
@@ -108,6 +108,7 @@
 		"pyodide": "^0.27.3",
 		"socket.io-client": "^4.2.0",
 		"sortablejs": "^1.15.2",
+		"svelte-pdf-simple": "^2.0.0",
 		"svelte-sonner": "^0.3.19",
 		"tippy.js": "^6.3.7",
 		"turndown": "^7.2.0",

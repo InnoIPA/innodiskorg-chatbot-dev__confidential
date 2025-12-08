@@ -29,6 +29,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.responses import Response
 
+
 from open_webui.config import (
     ADMIN_EMAIL,
     API_KEY_ALLOWED_ENDPOINTS,
@@ -852,6 +853,7 @@ class RedirectMiddleware(BaseHTTPMiddleware):
 app.add_middleware(RedirectMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 
+#app.add_middleware(CustomCORSMiddleware)
 
 @app.middleware("http")
 async def commit_session_after_request(request: Request, call_next):

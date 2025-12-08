@@ -42,6 +42,7 @@
 	$: fileUploadEnabled = $user?.role === 'admin' || $user?.permissions?.chat?.file_upload;
 
 	const init = async () => {
+
 		if ($_tools === null) {
 			await _tools.set(await getTools(localStorage.token));
 		}

@@ -5,6 +5,9 @@
 
 	onMount(() => {
 		if ($user?.role !== 'admin') {
+
+			//console.log('--- on mount ---')
+
 			if ($user?.permissions?.workspace?.models) {
 				goto('/workspace/models');
 			} else if ($user?.permissions?.workspace?.knowledge) {
@@ -12,7 +15,7 @@
 			} else if ($user?.permissions?.workspace?.prompts) {
 				goto('/workspace/prompts');
 			} else if ($user?.permissions?.workspace?.tools) {
-				goto('/workspace/tools');
+				goto('/workspace/tools');			
 			} else {
 				goto('/');
 			}

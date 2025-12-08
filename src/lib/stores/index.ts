@@ -41,6 +41,9 @@ export const shortCodesToEmojis = writable(
 	}, {})
 );
 
+export const knowledgeId: Writable<null | string> = writable(null);
+export const knowledgeFile: Writable<null | File> = writable(null);
+
 export const TTSWorker = writable(null);
 
 export const chatId = writable('');
@@ -68,6 +71,7 @@ export const showSidebar = writable(false);
 export const showSettings = writable(false);
 export const showArchivedChats = writable(false);
 export const showChangelog = writable(false);
+export const showCreateChunkModal = writable(false);
 
 export const showControls = writable(false);
 export const showOverview = writable(false);

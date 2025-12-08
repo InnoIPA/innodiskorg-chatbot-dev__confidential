@@ -3,22 +3,13 @@
 	import { toast } from 'svelte-sonner';
 	import { v4 as uuidv4 } from 'uuid';
 	import { PaneGroup, Pane, PaneResizer } from 'paneforge';
-	import dayjs from 'dayjs';
 
 	import { onMount, getContext, onDestroy, tick } from 'svelte';
 	const i18n = getContext('i18n');
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import {
-		mobile,
-		showSidebar,
-		knowledge as _knowledge,
-		config,
-		user,
-		knowledgeId,
-		knowledgeFile
-	} from '$lib/stores';
+	import { mobile, showSidebar, knowledge as _knowledge, config, user } from '$lib/stores';
 
 	import { updateFileDataContentById, uploadFile, deleteFileById } from '$lib/apis/files';
 	import {
@@ -49,10 +40,6 @@
 	import ChevronLeft from '$lib/components/icons/ChevronLeft.svelte';
 	import LockClosed from '$lib/components/icons/LockClosed.svelte';
 	import AccessControlModal from '../common/AccessControlModal.svelte';
-	import Check from '$lib/components/icons/Check.svelte';
-
-	import MyCheckbox from '$lib/components/common/Customize/MyCheckbox.svelte';
-	import MySwitch from '$lib/components/common/Customize/MySwitch.svelte';
 
 	let largeScreen = true;
 
@@ -88,36 +75,15 @@
 	}
 
 	$: if (fuse) {
-		console.log('fuse', fuse);
-
-		console.log('(1)--- filteredItems', filteredItems);
-
-		if (filteredItems.length === 0) {
-			filteredItems = query
-				? fuse.search(query).map((e) => {
-						return e.item;
-					})
-				: (knowledge?.files ?? []);
-
-			console.log('(2)--- filteredItems', filteredItems);
-
-			filteredItems = filteredItems.map((item) => {
-				return {
-					...item,
-					checked: false,
-					enabled: false
-				};
-			});
-		}
-
-		console.log('(3)--- filteredItems', filteredItems);
+		filteredItems = query
+			? fuse.search(query).map((e) => {
+					return e.item;
+				})
+			: (knowledge?.files ?? []);
 	}
 
 	let selectedFile = null;
 	let selectedFileId = null;
-
-	let selectedFilesNum = 0;
-	$: selectedFilesNum = filteredItems.filter((item) => item.checked).length;
 
 	$: if (selectedFileId) {
 		const file = (knowledge?.files ?? []).find((file) => file.id === selectedFileId);
@@ -135,8 +101,6 @@
 	let debounceTimeout = null;
 	let mediaQuery;
 	let dragged = false;
-
-	let checkAll = 'unchecked';
 
 	const createFileFromText = (name, content) => {
 		const blob = new Blob([content], { type: 'text/plain' });
@@ -591,67 +555,6 @@
 			return str;
 		}
 	};
-
-	const handleToggleCheckbox = async (id: string) => {
-		filteredItems = filteredItems.map((item) => {
-			return {
-				...item,
-				checked: item.id === id ? !item.checked : item.checked
-			};
-		});
-
-		console.log('(1) --- checkAll', checkAll);
-		checkAll = filteredItems.every((item) => item.checked === true)
-			? 'checked'
-			: filteredItems.every((item) => item.checked === false)
-				? 'unchecked'
-				: 'indeterminate';
-		console.log('(2) --- checkAll', checkAll);
-	};
-
-	const handleToggleAllCheckbox = async () => {
-		console.log('(1) handleToggleAllCheckbox', checkAll);
-
-		if (checkAll === 'checked') {
-			checkAll = 'unchecked';
-			filteredItems = filteredItems.map((item) => {
-				return {
-					...item,
-					checked: false
-				};
-			});
-		} else if (checkAll === 'unchecked') {
-			checkAll = 'checked';
-			filteredItems = filteredItems.map((item) => {
-				return {
-					...item,
-					checked: true
-				};
-			});
-		} else {
-			checkAll = 'checked';
-			filteredItems = filteredItems.map((item) => {
-				return {
-					...item,
-					checked: true
-				};
-			});
-		}
-
-		console.log('(2) handleToggleAllCheckbox', checkAll);
-
-		console.log('filter items', filteredItems);
-	};
-
-	const handleToggleAllToggleButton = async (enable: boolean) => {
-		console.log('handleToggleAllToggleButton', enable);
-		filteredItems = filteredItems.map((item) => {
-			return {
-				...item,
-				enabled: item.checked === true ? enable : item.enabled
-			};
-		});
-	};
 </script>
 
 {#if dragged}
@@ -719,7 +622,7 @@
 	}}
 />
 
-<div class="flex flex-col w-full translate-y-1 gap-2" id="collection-container">
+<div class="flex flex-col w-full translate-y-1" id="collection-container">
 	{#if id && knowledge}
 		<AccessControlModal
 			bind:show={showAccessControlModal}
@@ -778,180 +681,7 @@
 			</div>
 		</div>
 
-		<div
-			class="flex flex-row items-center flex-1 h-full max-h-full pb-2.5 gap-3 bg-slate-100 p-2 rounded-md"
-		>
-			<div>Selected: {filteredItems.filter((item) => item.checked === true).length} Files</div>
-			<div
-				class="flex items-center gap-1 cursor-pointer rounded-lg text-[16px] text-gray-500 group hover:text-gray-600 bg-gray-100 py-1 px-2"
-				on:click={() => {
-					handleToggleAllToggleButton(true);
-				}}
-			>
-				<svg
-					class="w-6 h-6 text-gray-800 dark:text-white"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<path
-						class="stroke-gray-400 group-hover:stroke-gray-600"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-					/>
-				</svg>
-				<span>Enable</span>
-			</div>
-
-			<div
-				class="flex items-center gap-1 cursor-pointer rounded-lg text-[16px] text-gray-500 group hover:text-gray-600 bg-gray-100 py-1 px-2"
-				on:click={() => {
-					handleToggleAllToggleButton(false);
-				}}
-			>
-				<svg
-					class="w-6 h-6 text-gray-800 dark:text-white"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<path
-						class="stroke-gray-400 group-hover:stroke-gray-600"
-						stroke-linecap="round"
-						stroke-width="2"
-						d="m6 6 12 12m3-6a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-					/>
-				</svg>
-				<span>Disable</span>
-			</div>
-			<div
-				class="flex items-center gap-1 cursor-pointer rounded-lg text-[16px] text-gray-500 group hover:text-gray-600 bg-gray-100 py-1 px-2"
-			>
-				<svg
-					class="w-6 h-6 text-gray-800 dark:text-white"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						class="text-gray-400 group-hover:stroke-gray-600"
-						fill-rule="evenodd"
-						d="M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z"
-						clip-rule="evenodd"
-					/>
-				</svg>
-
-				<span>Parse</span>
-			</div>
-			<div
-				class="flex items-center gap-1 cursor-pointer rounded-lg text-[16px] text-gray-500 group hover:text-gray-600 bg-gray-100 py-1 px-2"
-			>
-				<svg
-					class="w-6 h-6 text-gray-800 dark:text-white"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<path
-						class="stroke-gray-400 group-hover:stroke-gray-600"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="m15 9-6 6m0-6 6 6m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-					/>
-				</svg>
-
-				<span>Cancel</span>
-			</div>
-			<div
-				class="flex items-center gap-1 cursor-pointer rounded-lg text-[16px] text-red-400 group hover:text-red-600 bg-gray-100 py-1 px-2"
-			>
-				<svg
-					class="w-6 h-6 text-gray-800 dark:text-white"
-					aria-hidden="true"
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					fill="none"
-					viewBox="0 0 24 24"
-				>
-					<path
-						class="stroke-red-400 group-hover:stroke-red-600"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-					/>
-				</svg>
-				<span>Delete</span>
-			</div>
-		</div>
-
-		<div class="flex flex-row flex-1 h-full max-h-full pb-2.5 gap-3 bg-slate-100 p-2 rounded-md">
-			<table
-				class="w-full text-sm text-left text-gray-500 dark:text-gray-400 table-auto max-w-full rounded"
-			>
-				<thead>
-					<tr class="bg-slate-100 border-b-[1px] dark:bg-gray-800 border-slate-300 h-[30px]">
-						<th class="p-2">
-							<MyCheckbox state={checkAll} on:change={() => handleToggleAllCheckbox()} /></th
-						>
-						<th>Name</th>
-						<th>Created Date</th>
-						<th>Enable</th>
-						<th>Chunk Number</th>
-						<th>Parse</th>
-						<th>Action</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each filteredItems as item}
-						<tr class="bg-slate-100 border-b-[1px] dark:bg-gray-800 border-slate-300 h-[72px]">
-							<td class="p-2">
-								<MyCheckbox
-									state={item.checked === true ? 'checked' : 'unchecked'}
-									on:change={() => handleToggleCheckbox(item.id)}
-								/>
-							</td>
-							<td>
-								<div
-									class="line-clamp-1 cursor-pointer"
-									on:click={() => {
-										console.log(item);
-										knowledgeId.set(id);
-										knowledgeFile.set(item);
-										goto('/workspace/chunk');
-									}}
-								>
-									{item.filename}
-								</div></td
-							>
-							<td>{dayjs(item.created_at * 1000).format('YYYY-MM-DD HH:mm:ss')}</td>
-							<td><MySwitch state={item.enabled} /></td>
-							<td>{item.meta.size}</td>
-							<td>N/A</td>
-							<td>N/A</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
-
-		<!-- <div class="flex flex-row flex-1 h-full max-h-full pb-2.5 gap-3 bg-blue-300">
+		<div class="flex flex-row flex-1 h-full max-h-full pb-2.5 gap-3">
 			{#if largeScreen}
 				<div class="flex-1 flex justify-start w-full h-full max-h-full">
 					{#if selectedFile}
@@ -978,18 +708,6 @@
 									>
 										{decodeString(selectedFile?.meta?.name)}
 									</a>
-								</div>
-
-								<div>
-									<button
-										class="self-center w-fit text-sm py-1 px-2.5 dark:text-gray-300 dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 rounded-lg"
-										on:click={() => {
-											//updateFileContentHandler();
-											goto('/workspace/chunk');
-										}}
-									>
-										Chunk
-									</button>
 								</div>
 
 								<div>
@@ -1162,7 +880,7 @@
 					</div>
 				</div>
 			</div>
-		</div> -->
+		</div>
 	{:else}
 		<Spinner />
 	{/if}

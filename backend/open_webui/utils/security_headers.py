@@ -11,6 +11,8 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         response.headers.update(set_security_headers())
         return response
+    
+  
 
 
 def set_security_headers() -> Dict[str, str]:
@@ -46,7 +48,7 @@ def set_security_headers() -> Dict[str, str]:
         "XDOWNLOAD_OPTIONS": set_xdownload_options,
         "XFRAME_OPTIONS": set_xframe,
         "XPERMITTED_CROSS_DOMAIN_POLICIES": set_xpermitted_cross_domain_policies,
-        "CONTENT_SECURITY_POLICY": set_content_security_policy,
+        "CONTENT_SECURITY_POLICY": set_content_security_policy,      
     }
 
     for env_var, setter in header_setters.items():
