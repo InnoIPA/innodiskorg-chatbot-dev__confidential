@@ -7,7 +7,7 @@
 https://docs.openwebui.com/getting-started/advanced-topics/development
 
 
-## 開發時的後端連線設定
+## 開發時的設定
 
 ### Step 1:
 啟動後端:
@@ -58,7 +58,7 @@ http://localhost:5173
 
 
 
-## 佈署時的後端連線設定
+## 完成版本目標後的注意事項
 ### Step 1:
 執行run.sh整合前後端產生docker image
 
