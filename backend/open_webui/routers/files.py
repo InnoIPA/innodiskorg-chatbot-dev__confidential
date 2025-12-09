@@ -85,6 +85,9 @@ def upload_file(
     user=Depends(get_verified_user),
     file_metadata: dict = {},
     process: bool = Query(True),
+    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
+    chunk_token_num: int = Query(128),  # ========== Add by Judy ==========
+    delimiter: str = Query("\n。；！？"),  # ========== Add by Judy ==========
 ):
     log.info(f"file.content_type: {file.content_type}")
     try:
@@ -115,6 +118,8 @@ def upload_file(
         )
         if process:
             try:
+                # ========== Change by Judy ==========
+
                 if file.content_type in [
                     "audio/mpeg",
                     "audio/wav",
@@ -124,15 +129,38 @@ def upload_file(
                     file_path = Storage.get_file(file_path)
                     result = transcribe(request, file_path)
 
-                    process_file(
-                        request,
-                        ProcessFileForm(file_id=id, content=result.get("text", "")),
-                        user=user,
+                    form_data = ProcessFileForm(
+                        file_id=id,
+                        content=result.get("text", ""),
+                        use_ragflow=use_ragflow,
+                        chunk_token_num=chunk_token_num,
+                        delimiter=delimiter,
                     )
+                    process_result = process_file(request, form_data, user=user)
                 elif file.content_type not in ["image/png", "image/jpeg", "image/gif"]:
-                    process_file(request, ProcessFileForm(file_id=id), user=user)
+                    form_data = ProcessFileForm(
+                        file_id=id,
+                        use_ragflow=use_ragflow,
+                        chunk_token_num=chunk_token_num,
+                        delimiter=delimiter,
+                    )
+                    process_result = process_file(request, form_data, user=user)
+                else:
+                    process_result = None
 
                 file_item = Files.get_file_by_id(id=id)
+
+                # Add RAGFlow results to the response if RAGFlow is used
+                if use_ragflow and process_result and isinstance(process_result, dict):
+                    rag_res = process_result.get("ragflow_results", [])
+                    existing_data = file_item.data or {}
+                    merged_data = {**existing_data, "ragflow_results": rag_res}
+                    file_item.data = merged_data
+
+                from ragflow.run_pdf import print_message
+                print_message("/files/", [vars(file_item)])
+
+                # ========== Change by Judy ==========
             except Exception as e:
                 log.exception(e)
                 log.error(f"Error processing file: {file_item.id}")

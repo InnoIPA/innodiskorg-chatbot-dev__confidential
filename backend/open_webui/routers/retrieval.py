@@ -93,8 +93,19 @@ from open_webui.env import (
 )
 from open_webui.constants import ERROR_MESSAGES
 
+# Open WebUI logger
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["RAG"])
+
+# ========== Add by Judy ==========
+
+from ragflow.run_pdf import KnowledgeHandler, print_message
+
+# RAGFlow logger
+ragflow_logger = logging.getLogger("ragflow")
+
+# ========== Add by Judy ==========
+
 
 ##########################################
 #
@@ -796,6 +807,7 @@ def save_docs_to_vector_db(
     request: Request,
     docs,
     collection_name,
+    use_ragflow: bool,  # ========== Add by Judy ==========
     metadata: Optional[dict] = None,
     overwrite: bool = False,
     split: bool = True,
@@ -836,28 +848,35 @@ def save_docs_to_vector_db(
                 raise ValueError(ERROR_MESSAGES.DUPLICATE_CONTENT)
 
     if split:
-        if request.app.state.config.TEXT_SPLITTER in ["", "character"]:
-            text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=request.app.state.config.CHUNK_SIZE,
-                chunk_overlap=request.app.state.config.CHUNK_OVERLAP,
-                add_start_index=True,
-            )
-        elif request.app.state.config.TEXT_SPLITTER == "token":
-            log.info(
-                f"Using token text splitter: {request.app.state.config.TIKTOKEN_ENCODING_NAME}"
-            )
+        # ========== Change by Judy ==========
 
-            tiktoken.get_encoding(str(request.app.state.config.TIKTOKEN_ENCODING_NAME))
-            text_splitter = TokenTextSplitter(
-                encoding_name=str(request.app.state.config.TIKTOKEN_ENCODING_NAME),
-                chunk_size=request.app.state.config.CHUNK_SIZE,
-                chunk_overlap=request.app.state.config.CHUNK_OVERLAP,
-                add_start_index=True,
-            )
+        if use_ragflow:
+            pass  # Do nothing
         else:
-            raise ValueError(ERROR_MESSAGES.DEFAULT("Invalid text splitter"))
+            if request.app.state.config.TEXT_SPLITTER in ["", "character"]:
+                text_splitter = RecursiveCharacterTextSplitter(
+                    chunk_size=request.app.state.config.CHUNK_SIZE,
+                    chunk_overlap=request.app.state.config.CHUNK_OVERLAP,
+                    add_start_index=True,
+                )
+            elif request.app.state.config.TEXT_SPLITTER == "token":
+                log.info(
+                    f"Using token text splitter: {request.app.state.config.TIKTOKEN_ENCODING_NAME}"
+                )
 
-        docs = text_splitter.split_documents(docs)
+                tiktoken.get_encoding(str(request.app.state.config.TIKTOKEN_ENCODING_NAME))
+                text_splitter = TokenTextSplitter(
+                    encoding_name=str(request.app.state.config.TIKTOKEN_ENCODING_NAME),
+                    chunk_size=request.app.state.config.CHUNK_SIZE,
+                    chunk_overlap=request.app.state.config.CHUNK_OVERLAP,
+                    add_start_index=True,
+                )
+            else:
+                raise ValueError(ERROR_MESSAGES.DEFAULT("Invalid text splitter"))
+
+            docs = text_splitter.split_documents(docs)
+
+        # ========== Change by Judy ==========
 
     if len(docs) == 0:
         raise ValueError(ERROR_MESSAGES.EMPTY_CONTENT)
@@ -950,6 +969,9 @@ class ProcessFileForm(BaseModel):
     file_id: str
     content: Optional[str] = None
     collection_name: Optional[str] = None
+    use_ragflow: Optional[bool] = False  # ========== Add by Judy ==========
+    chunk_token_num: Optional[int] = 128  # ========== Add by Judy ==========
+    delimiter: Optional[str] = "\n。；！？"  # ========== Add by Judy ==========
 
 
 @router.post("/process/file")
@@ -1041,6 +1063,55 @@ def process_file(
                     file.filename, file.meta.get("content_type"), file_path
                 )
 
+                # ========== Add by Judy ==========
+
+                # If `use_ragflow` is True, change to RAGFlow content
+                if form_data.use_ragflow:
+                    total_pages = int(docs[0].metadata.get("total_pages", 100000))
+                    chunks: list[dict] = KnowledgeHandler.prcoess_pdf(
+                        file_path,
+                        from_page=0,
+                        to_page=total_pages,
+                        chunk_token_num=form_data.chunk_token_num,
+                        delimiter=form_data.delimiter,
+                    )
+                    # print_message("parse and chunk", chunks)
+
+                    metadata = docs[0].metadata
+                    docs = [
+                        Document(
+                            page_content=chunk.get("content_with_weight", ""),
+                            metadata=metadata,
+                        )
+                        for chunk in chunks
+                    ]
+                    # print_message("new_docs", docs)
+
+                    # Also, save chunks' texts and image paths in a JSON file
+                    from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR, ROOT_DIR
+
+                    json_dir = IMAGE_DIR / f"{file.id}"
+                    json_path = json_dir / CHUNK_INFO_FILE
+                    json_entries = [
+                        {
+                            "text": chunk.get("content_with_weight", ""),
+                            "image_path": (
+                                Path(chunk["image_path"]).relative_to(ROOT_DIR)
+                                if "image_path" in chunk.keys()
+                                else ""
+                            ),
+                            "total_pages": total_pages,
+                            "current_pages": chunk.get("page_num_int", []),
+                        }
+                        for chunk in chunks
+                    ]
+
+                    json_dir.mkdir(parents=True, exist_ok=True)
+                    with json_path.open("w", encoding="utf-8") as f:
+                        json.dump(json_entries, f, indent=4, ensure_ascii=False)
+
+                # ========== Add by Judy ==========
+
                 docs = [
                     Document(
                         page_content=doc.page_content,
@@ -1067,7 +1138,15 @@ def process_file(
                         },
                     )
                 ]
-            text_content = " ".join([doc.page_content for doc in docs])
+
+            # ========== Change by Judy ==========
+
+            if form_data.use_ragflow:
+                text_content = "<cut>".join([doc.page_content for doc in docs])
+            else:
+                text_content = " ".join([doc.page_content for doc in docs])
+
+            # ========== Change by Judy ==========
 
         log.debug(f"text_content: {text_content}")
         Files.update_file_data_by_id(
@@ -1084,6 +1163,7 @@ def process_file(
                     request,
                     docs=docs,
                     collection_name=collection_name,
+                    use_ragflow=form_data.use_ragflow,  # ========== Add by Judy ==========
                     metadata={
                         "file_id": file.id,
                         "name": file.filename,
@@ -1100,6 +1180,31 @@ def process_file(
                             "collection_name": collection_name,
                         },
                     )
+
+                    # ========== Add by Judy ==========
+
+                    # print_message("docs", docs)
+
+                    # If `use_ragflow` is True, get chunks' information
+                    if form_data.use_ragflow:
+                        from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
+
+                        json_dir = IMAGE_DIR / f"{file.id}"
+                        json_path = json_dir / CHUNK_INFO_FILE
+                        with json_path.open("r", encoding="utf-8") as f:
+                            chunks = json.load(f)
+
+                        return_info = {
+                            "status": True,
+                            "collection_name": collection_name,
+                            "filename": file.filename,
+                            "content": text_content,
+                            "ragflow_results": chunks,
+                        }
+                        # print_message("return_info", [return_info])
+                        return return_info
+
+                    # ========== Add by Judy ==========
 
                     return {
                         "status": True,

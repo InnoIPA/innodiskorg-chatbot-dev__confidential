@@ -313,6 +313,11 @@ async def update_knowledge_by_id(
 ############################
 
 
+# ========== Add by Judy ==========
+from fastapi import Query
+# ========== Add by Judy ==========
+
+
 class KnowledgeFileIdForm(BaseModel):
     file_id: str
 
@@ -322,6 +327,7 @@ def add_file_to_knowledge_by_id(
     request: Request,
     id: str,
     form_data: KnowledgeFileIdForm,
+    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
     user=Depends(get_verified_user),
 ):
     knowledge = Knowledges.get_knowledge_by_id(id=id)
@@ -381,10 +387,35 @@ def add_file_to_knowledge_by_id(
             if knowledge:
                 files = Files.get_files_by_ids(file_ids)
 
-                return KnowledgeFilesResponse(
+                # ========== Change by Judy ==========
+
+                if use_ragflow:
+                    import json
+                    from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
+
+                    for idx, file in enumerate(files):
+                        # Read `chunk_info.json` to get RAGFlow results
+                        json_dir = IMAGE_DIR / f"{file.id}"
+                        json_path = json_dir / CHUNK_INFO_FILE
+                        with json_path.open("r", encoding="utf-8") as f:
+                            chunks = json.load(f)
+
+                        # Add RAGFlow results to the response if RAGFlow is used
+                        existing_data = file.data or {}
+                        merged_data = {**existing_data, "ragflow_results": chunks}
+                        files[idx].data = merged_data
+
+                knowledge_files = KnowledgeFilesResponse(
                     **knowledge.model_dump(),
                     files=files,
                 )
+
+                from ragflow.run_pdf import print_message
+                print_message("/knowledge/\{id\}/file/add/", [vars(knowledge_files)])
+
+                return knowledge_files
+
+                # ========== Change by Judy ==========
             else:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
