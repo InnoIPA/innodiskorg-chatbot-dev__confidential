@@ -1,0 +1,77 @@
+# ========== Add by Judy ==========
+
+# current latest version ( 2025/11/21 )
+anthropic
+aspose-diagram-python
+aspose-slides
+chardet
+cn2an
+dashscope
+datrie
+demjson3
+filelock
+Flask
+Flask-Login
+# google-cloud-aiplatform      # Uninstalled because of version conflict with Open WebUI
+google-oauth2-tool
+graphrag
+hanziconv
+infinity-sdk
+# jina                         # Uninstalled because of version conflict with Open WebUI
+minio
+mistralai
+ollama
+onnxruntime-gpu
+opendal
+pdfplumber
+pyclipper
+pycryptodome
+python-docx
+qianfan
+replicate
+roman-numbers
+ruamel.yaml
+shapely
+StrEnum
+tavily-python
+torch
+transformers
+trio
+valkey
+Werkzeug
+word2number
+xpinyin
+xxhash
+# zhipuai                      # Uninstalled because of version conflict with Open WebUI
+
+
+# specified version
+azure-storage-file-datalake==12.17.0
+azure-storage-blob==12.24.1
+boto3==1.35.53
+datasets==2.20.0
+elasticsearch==8.17.1
+elasticsearch-dsl==8.17.1
+google-generativeai==0.8.4
+grpcio==1.67.0
+grpcio-health-checking==1.67.0
+grpcio-reflection==1.67.0
+grpcio-status==1.67.0
+grpcio-tools==1.67.0
+langfuse==2.44.0
+Markdown==3.7
+markdown-to-json==2.1.1
+mcp==1.12.4
+opencv-python-headless==4.11.0.86
+opensearch-protobufs==0.0.2
+opensearch-py==2.8.0
+peewee==3.17.9
+protobuf==5.29.5
+PyMySQL==1.1.1
+pypdf==4.3.1
+requests==2.32.3
+tencentcloud-sdk-python==3.0.1336
+uvicorn[standard]==0.34.0
+xgboost==1.6.2
+
+# ========== Add by Judy ==========
