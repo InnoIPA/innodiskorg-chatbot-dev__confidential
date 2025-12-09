@@ -6,7 +6,16 @@ import os
 import sys
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path  # ========== Add by Judy ==========
 from urllib.parse import parse_qs, urlencode, urlparse
+
+# ========== Add by Judy ==========
+
+# Add backend path to system path
+BACKEND_PATH = Path(__file__).resolve().parents[1]
+sys.path.append(str(BACKEND_PATH))
+
+# ========== Add by Judy ==========
 
 import aiohttp
 import requests
@@ -358,6 +367,17 @@ if SAFE_MODE:
 logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["MAIN"])
+
+# ========== Add by Judy ==========
+
+import nltk
+
+# Download `punkt_tab` and `wordnet`
+# (PS. Download to '/root/nltk_data' path in the Docker container)
+nltk.download('punkt_tab')
+nltk.download('wordnet')
+
+# ========== Add by Judy ==========
 
 
 class SPAStaticFiles(StaticFiles):
