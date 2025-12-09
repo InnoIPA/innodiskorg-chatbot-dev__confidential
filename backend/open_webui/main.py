@@ -364,9 +364,20 @@ if SAFE_MODE:
     print("SAFE MODE ENABLED")
     Functions.deactivate_all_functions()
 
+# Initialize Open WebUI logger
 logging.basicConfig(stream=sys.stdout, level=GLOBAL_LOG_LEVEL)
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["MAIN"])
+
+# ========== Add by Judy ==========
+
+from ragflow.api.utils.log_utils import init_ragflow_logger
+
+# Initialize RAGFlow logger
+init_ragflow_logger("ragflow_server")
+ragflow_logger = logging.getLogger("ragflow")
+
+# ========== Add by Judy ==========
 
 # ========== Add by Judy ==========
 
