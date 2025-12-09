@@ -1096,7 +1096,7 @@ def process_file(
                         {
                             "text": chunk.get("content_with_weight", ""),
                             "image_path": (
-                                Path(chunk["image_path"]).relative_to(ROOT_DIR)
+                                str(Path(chunk["image_path"]).relative_to(ROOT_DIR))
                                 if "image_path" in chunk.keys()
                                 else ""
                             ),
