@@ -41,7 +41,7 @@ class HelperFunction:
 
     @staticmethod
     def add_ragflow_results(files: list[FileModel]) -> None:
-        """Add RAGFlow results to response JSON.
+        """If RAGFlow results exist, add to response JSON.
 
         Args:
             files (list[FileModel]): The list of files.
@@ -51,16 +51,18 @@ class HelperFunction:
         from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
 
         for idx, file in enumerate(files):
-            # Read `chunk_info.json` to get RAGFlow results
             json_dir = IMAGE_DIR / f"{file.id}"
             json_path = json_dir / CHUNK_INFO_FILE
-            with json_path.open("r", encoding="utf-8") as f:
-                chunks = json.load(f)
 
-            # Add RAGFlow results to response JSON
-            existing_data = file.data or {}
-            merged_data = {**existing_data, "ragflow_results": chunks}
-            files[idx].data = merged_data
+            if json_path.is_file():
+                # Read `chunk_info.json` to get RAGFlow results
+                with json_path.open("r", encoding="utf-8") as f:
+                    chunks = json.load(f)
+
+                # Add RAGFlow results to response JSON
+                existing_data = file.data or {}
+                merged_data = {**existing_data, "ragflow_results": chunks}
+                files[idx].data = merged_data
 
 # ========== Add by Judy ==========
 
@@ -421,8 +423,7 @@ def add_file_to_knowledge_by_id(
 
                 # ========== Change by Judy ==========
 
-                if use_ragflow:
-                    HelperFunction.add_ragflow_results(files)
+                HelperFunction.add_ragflow_results(files)
 
                 knowledge_files = KnowledgeFilesResponse(
                     **knowledge.model_dump(),
@@ -528,7 +529,6 @@ def update_file_from_knowledge_by_id(
 def remove_file_from_knowledge_by_id(
     id: str,
     form_data: KnowledgeFileIdForm,
-    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
     user=Depends(get_verified_user),
 ):
     knowledge = Knowledges.get_knowledge_by_id(id=id)
@@ -605,8 +605,7 @@ def remove_file_from_knowledge_by_id(
 
                 # ========== Change by Judy ==========
 
-                if use_ragflow:
-                    HelperFunction.add_ragflow_results(files)
+                HelperFunction.add_ragflow_results(files)
 
                 knowledge_files = KnowledgeFilesResponse(
                     **knowledge.model_dump(),
