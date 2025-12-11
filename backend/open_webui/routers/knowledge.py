@@ -64,6 +64,23 @@ class HelperFunction:
                 merged_data = {**existing_data, "ragflow_results": chunks}
                 files[idx].data = merged_data
 
+    @staticmethod
+    def print_knowledge_response(title: str, response: KnowledgeResponse) -> None:
+        """Print response JSON.
+
+        Args:
+            title (str): The title of response JSON.
+            response (KnowledgeResponse | KnowledgeFilesResponse): The content of response JSON. 
+                The type `KnowledgeFilesResponse` is inherited from `KnowledgeResponse`.
+        """
+
+        res = vars(response)
+        for idx, file in enumerate(res.get("files", [])):
+            res["files"][idx] = vars(file)
+
+        from ragflow.run_pdf import print_message
+        print_message(title, [res])
+
 # ========== Add by Judy ==========
 
 
@@ -430,8 +447,10 @@ def add_file_to_knowledge_by_id(
                     files=files,
                 )
 
-                from ragflow.run_pdf import print_message
-                print_message("/knowledge/\{id\}/file/add/", [vars(knowledge_files)])
+                HelperFunction.print_knowledge_response(
+                    "/knowledge/\{id\}/file/add/",
+                    knowledge_files,
+                )
 
                 return knowledge_files
 
