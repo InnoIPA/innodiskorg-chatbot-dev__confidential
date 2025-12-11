@@ -378,7 +378,6 @@ def add_file_to_knowledge_by_id(
     request: Request,
     id: str,
     form_data: KnowledgeFileIdForm,
-    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
     user=Depends(get_verified_user),
 ):
     knowledge = Knowledges.get_knowledge_by_id(id=id)
