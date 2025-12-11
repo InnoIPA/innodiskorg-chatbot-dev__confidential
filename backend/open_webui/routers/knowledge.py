@@ -631,8 +631,10 @@ def remove_file_from_knowledge_by_id(
                     files=files,
                 )
 
-                from ragflow.run_pdf import print_message
-                print_message("/knowledge/\{id\}/file/remove/", [vars(knowledge_files)])
+                HelperFunction.print_knowledge_response(
+                    "/knowledge/\{id\}/file/remove/",
+                    knowledge_files,
+                )
 
                 return knowledge_files
 
