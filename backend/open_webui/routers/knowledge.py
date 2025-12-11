@@ -33,6 +33,38 @@ log.setLevel(SRC_LOG_LEVELS["MODELS"])
 
 router = APIRouter()
 
+
+# ========== Add by Judy ==========
+
+class HelperFunction:
+    """The collection of helper functions."""
+
+    @staticmethod
+    def add_ragflow_results(files: list[FileModel]) -> None:
+        """Add RAGFlow results to response JSON.
+
+        Args:
+            files (list[FileModel]): The list of files.
+        """
+
+        import json
+        from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
+
+        for idx, file in enumerate(files):
+            # Read `chunk_info.json` to get RAGFlow results
+            json_dir = IMAGE_DIR / f"{file.id}"
+            json_path = json_dir / CHUNK_INFO_FILE
+            with json_path.open("r", encoding="utf-8") as f:
+                chunks = json.load(f)
+
+            # Add RAGFlow results to response JSON
+            existing_data = file.data or {}
+            merged_data = {**existing_data, "ragflow_results": chunks}
+            files[idx].data = merged_data
+
+# ========== Add by Judy ==========
+
+
 ############################
 # getKnowledgeBases
 ############################
@@ -509,6 +541,7 @@ def update_file_from_knowledge_by_id(
 def remove_file_from_knowledge_by_id(
     id: str,
     form_data: KnowledgeFileIdForm,
+    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
     user=Depends(get_verified_user),
 ):
     knowledge = Knowledges.get_knowledge_by_id(id=id)
@@ -568,13 +601,37 @@ def remove_file_from_knowledge_by_id(
 
             knowledge = Knowledges.update_knowledge_data_by_id(id=id, data=data)
 
+            # ========== Add by Judy ==========
+
+            # Delete chunk images from localhost
+            import shutil
+            from ragflow.constants import IMAGE_DIR
+
+            image_dir = IMAGE_DIR / f"{form_data.file_id}"
+            if image_dir.is_dir():
+                shutil.rmtree(image_dir, ignore_errors=True)
+
+            # ========== Add by Judy ==========
+
             if knowledge:
                 files = Files.get_files_by_ids(file_ids)
 
-                return KnowledgeFilesResponse(
+                # ========== Change by Judy ==========
+
+                if use_ragflow:
+                    HelperFunction.add_ragflow_results(files)
+
+                knowledge_files = KnowledgeFilesResponse(
                     **knowledge.model_dump(),
                     files=files,
                 )
+
+                from ragflow.run_pdf import print_message
+                print_message("/knowledge/\{id\}/file/remove/", [vars(knowledge_files)])
+
+                return knowledge_files
+
+                # ========== Change by Judy ==========
             else:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
