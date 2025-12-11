@@ -304,10 +304,23 @@ async def get_knowledge_by_id(id: str, user=Depends(get_verified_user)):
             file_ids = knowledge.data.get("file_ids", []) if knowledge.data else []
             files = Files.get_files_by_ids(file_ids)
 
-            return KnowledgeFilesResponse(
+            # ========== Change by Judy ==========
+
+            HelperFunction.add_ragflow_results(files)
+
+            knowledge_files = KnowledgeFilesResponse(
                 **knowledge.model_dump(),
                 files=files,
             )
+
+            HelperFunction.print_knowledge_response(
+                "/knowledge/\{id\}/",
+                knowledge_files,
+            )
+
+            return knowledge_files
+
+            # ========== Change by Judy ==========
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
