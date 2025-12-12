@@ -2,6 +2,10 @@ name: Build release
 on:
   workflow_dispatch:
 
+env:
+  ACCELBRAIN_REPO_NAME: AccelBrain
+  ACCELBRAIN_DIR: accelbrain
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -83,20 +87,20 @@ jobs:
           echo "Workflow run ID: ${{ steps.trigger_and_wait.outputs.id }}"
           echo "Workflow URL: ${{ steps.trigger_and_wait.outputs.html_url }}"
 
-      - name: Checkout AccelBrain-dev__confidential repository
+      - name: Checkout ${{ env.ACCELBRAIN_REPO_NAME }} repository
         if: steps.trigger_and_wait.outputs.conclusion == 'success'
         uses: actions/checkout@v4
         with:
-          repository: InnoIPA/AccelBrain-dev__confidential
+          repository: InnoIPA/${{ env.ACCELBRAIN_REPO_NAME }}
           ref: dev
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          path: accelbrain-confidential
+          path: ${{ env.ACCELBRAIN_DIR }}
 
-      - name: Get latest release tag from accelbrain-confidential repo
+      - name: Get latest release tag from ${{ env.ACCELBRAIN_DIR }} repo
         if: steps.trigger_and_wait.outputs.conclusion == 'success'
         id: get_release
         run: |
-          cd accelbrain-confidential || (echo "Directory not found" && exit 1)
+          cd ${{ env.ACCELBRAIN_DIR }} || (echo "Directory not found" && exit 1)
           git fetch --tags
           TAG=$(git tag --sort=-v:refname | head -n 1)
           echo "release_tag=$TAG" >> $GITHUB_OUTPUT
@@ -105,13 +109,13 @@ jobs:
       - name: Update docker-compose.yml image tag
         if: steps.trigger_and_wait.outputs.conclusion == 'success'
         run: |
-          cd accelbrain-confidential || (echo "Directory not found" && exit 1)
+          cd ${{ env.ACCELBRAIN_DIR }} || (echo "Directory not found" && exit 1)
           sed -i "s|innodiskorg/open-webui:.*|innodiskorg/open-webui:v${{ steps.get_version.outputs.version }}|g" docker-compose.yml
 
       - name: Update CHANGELOG.md
         if: steps.trigger_and_wait.outputs.conclusion == 'success'
         run: |
-          cd accelbrain-confidential || (echo "Directory not found" && exit 1)
+          cd ${{ env.ACCELBRAIN_DIR }} || (echo "Directory not found" && exit 1)
           echo "Reading current version from CHANGELOG.md"
 
           # 先取出上一個版本號（第一個 [vX.X]）
@@ -197,4 +201,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: bump open-webui image to v${{ steps.get_version.outputs.version }}"
-          repository: ./accelbrain-confidential
+          repository: ./${{ env.ACCELBRAIN_DIR }}
