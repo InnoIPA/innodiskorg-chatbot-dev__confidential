@@ -729,6 +729,20 @@ async def delete_knowledge_by_id(id: str, user=Depends(get_verified_user)):
     except Exception as e:
         log.debug(e)
         pass
+
+    # Added by Judy >>>>>>>>>>>>>>>>>>>>
+
+    # Delete chunk images from localhost
+    import shutil
+    from ragflow.constants import IMAGE_DIR
+
+    for fid in ( knowledge.data.get("file_ids", []) ):
+        f_img_dir = IMAGE_DIR / f"{fid}"
+        if f_img_dir.is_dir():
+            shutil.rmtree(f_img_dir, ignore_errors=True)
+
+    # <<<<<<<<<<<<<<<<<<<< Added by Judy
+
     result = Knowledges.delete_knowledge_by_id(id=id)
     return result
 
