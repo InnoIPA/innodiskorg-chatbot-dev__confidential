@@ -1,4 +1,4 @@
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 # current latest version ( 2025/11/21 )
 anthropic
@@ -74,4 +74,4 @@ tencentcloud-sdk-python==3.0.1336
 uvicorn[standard]==0.34.0
 xgboost==1.6.2
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy

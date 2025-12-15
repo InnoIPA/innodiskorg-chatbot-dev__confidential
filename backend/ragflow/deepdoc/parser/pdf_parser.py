@@ -49,11 +49,12 @@ from ragflow.rag.settings import PARALLEL_DEVICES
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 LOCK_KEY_pdfplumber = "global_shared_lock_pdfplumber"
 if LOCK_KEY_pdfplumber not in sys.modules:

@@ -28,10 +28,11 @@ from ragflow.api.utils import decrypt_database_config, get_base_config
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.rag.nlp import search
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.utils import es_conn, infinity_conn, opensearch_conn
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 LIGHTEN = int(os.environ.get("LIGHTEN", "0"))
 

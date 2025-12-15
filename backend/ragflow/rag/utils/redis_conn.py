@@ -30,11 +30,12 @@ from ragflow.rag.utils import singleton
 
 from valkey.lock import Lock
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 class RedisMsg:

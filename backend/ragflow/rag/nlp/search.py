@@ -35,11 +35,12 @@ from ragflow.rag.utils.doc_store_conn import (
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 def index_name(uid): return f"ragflow_{uid}"

@@ -23,11 +23,12 @@ import numpy as np
 import six
 from PIL import Image
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 class DecodeImage:

@@ -44,11 +44,12 @@ from ragflow.rag.utils import truncate
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 GRAPH_FIELD_SEP = "<SEP>"
 DEFAULT_ENTITY_TYPES = ["organization", "person", "geo", "event", "category"]

@@ -25,11 +25,12 @@ from ragflow.rag.nlp import find_codec
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 # copied from `/openpyxl/cell/cell.py`
 ILLEGAL_CHARACTERS_RE = re.compile(r'[\000-\010]|[\013-\014]|[\016-\037]')

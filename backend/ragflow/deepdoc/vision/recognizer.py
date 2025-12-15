@@ -28,11 +28,12 @@ from .ocr import load_model
 from .operators import *  # noqa: F403
 from .operators import preprocess
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 class Recognizer:

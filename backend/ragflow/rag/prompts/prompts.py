@@ -32,11 +32,12 @@ from ragflow.rag.utils import encoder, num_tokens_from_string
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 STOP_TOKEN="<|STOP|>"
 COMPLETE_TASK="complete_task"

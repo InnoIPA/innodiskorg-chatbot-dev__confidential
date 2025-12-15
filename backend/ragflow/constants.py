@@ -1,4 +1,4 @@
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 from pathlib import Path
 
@@ -9,4 +9,4 @@ LOG_DIR = ROOT_DIR / "logs"
 
 CHUNK_INFO_FILE = "chunk_info.json"
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy

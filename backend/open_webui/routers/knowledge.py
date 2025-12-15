@@ -34,7 +34,7 @@ log.setLevel(SRC_LOG_LEVELS["MODELS"])
 router = APIRouter()
 
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 class HelperFunction:
     """The collection of helper functions."""
@@ -81,7 +81,7 @@ class HelperFunction:
         from ragflow.run_pdf import print_message
         print_message(title, [res])
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 ############################
@@ -377,9 +377,11 @@ async def update_knowledge_by_id(
 ############################
 
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 from fastapi import Query
-# ========== Add by Judy ==========
+
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 class KnowledgeFileIdForm(BaseModel):
@@ -619,7 +621,7 @@ def remove_file_from_knowledge_by_id(
 
             knowledge = Knowledges.update_knowledge_data_by_id(id=id, data=data)
 
-            # ========== Add by Judy ==========
+            # Added by Judy >>>>>>>>>>>>>>>>>>>>
 
             # Delete chunk images from localhost
             import shutil
@@ -629,7 +631,7 @@ def remove_file_from_knowledge_by_id(
             if image_dir.is_dir():
                 shutil.rmtree(image_dir, ignore_errors=True)
 
-            # ========== Add by Judy ==========
+            # <<<<<<<<<<<<<<<<<<<< Added by Judy
 
             if knowledge:
                 files = Files.get_files_by_ids(file_ids)

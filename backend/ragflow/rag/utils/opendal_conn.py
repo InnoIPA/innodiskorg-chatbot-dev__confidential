@@ -11,11 +11,12 @@ from ragflow.rag.utils import singleton
 
 # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 CREATE_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS `{}` (

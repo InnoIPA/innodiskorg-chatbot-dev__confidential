@@ -24,11 +24,12 @@ from ragflow.rag.nlp import rag_tokenizer  # >>>>>>>>>> Changed by Judy <<<<<<<<
 
 from . import regions
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 current_file_path = os.path.dirname(os.path.abspath(__file__))
 GOODS = pd.read_csv(

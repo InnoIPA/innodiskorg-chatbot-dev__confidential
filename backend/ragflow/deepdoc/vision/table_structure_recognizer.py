@@ -25,11 +25,12 @@ from ragflow.rag.nlp import rag_tokenizer                              # >>>>>>>
 
 from .recognizer import Recognizer
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 class TableStructureRecognizer(Recognizer):

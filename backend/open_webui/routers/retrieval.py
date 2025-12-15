@@ -97,14 +97,14 @@ from open_webui.constants import ERROR_MESSAGES
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["RAG"])
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 from ragflow.run_pdf import KnowledgeHandler, print_message
 
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 ##########################################
@@ -807,7 +807,7 @@ def save_docs_to_vector_db(
     request: Request,
     docs,
     collection_name,
-    use_ragflow: bool,  # ========== Add by Judy ==========
+    use_ragflow: bool,  # >>>>>>>>>> Added by Judy <<<<<<<<<<
     metadata: Optional[dict] = None,
     overwrite: bool = False,
     split: bool = True,
@@ -969,9 +969,9 @@ class ProcessFileForm(BaseModel):
     file_id: str
     content: Optional[str] = None
     collection_name: Optional[str] = None
-    use_ragflow: Optional[bool] = False  # ========== Add by Judy ==========
-    chunk_token_num: Optional[int] = 128  # ========== Add by Judy ==========
-    delimiter: Optional[str] = "\n。；！？"  # ========== Add by Judy ==========
+    use_ragflow: Optional[bool] = False  # >>>>>>>>>> Added by Judy <<<<<<<<<<
+    chunk_token_num: Optional[int] = 128  # >>>>>>>>>> Added by Judy <<<<<<<<<<
+    delimiter: Optional[str] = "\n。；！？"  # >>>>>>>>>> Added by Judy <<<<<<<<<<
 
 
 @router.post("/process/file")
@@ -1063,7 +1063,7 @@ def process_file(
                     file.filename, file.meta.get("content_type"), file_path
                 )
 
-                # ========== Add by Judy ==========
+                # Added by Judy >>>>>>>>>>>>>>>>>>>>
 
                 # If `use_ragflow` is True, change to RAGFlow content
                 if form_data.use_ragflow:
@@ -1110,7 +1110,7 @@ def process_file(
                     with json_path.open("w", encoding="utf-8") as f:
                         json.dump(json_entries, f, indent=4, ensure_ascii=False)
 
-                # ========== Add by Judy ==========
+                # <<<<<<<<<<<<<<<<<<<< Added by Judy
 
                 docs = [
                     Document(
@@ -1163,7 +1163,7 @@ def process_file(
                     request,
                     docs=docs,
                     collection_name=collection_name,
-                    use_ragflow=form_data.use_ragflow,  # ========== Add by Judy ==========
+                    use_ragflow=form_data.use_ragflow,  # >>>>>>>>>> Added by Judy <<<<<<<<<<
                     metadata={
                         "file_id": file.id,
                         "name": file.filename,
@@ -1181,7 +1181,7 @@ def process_file(
                         },
                     )
 
-                    # ========== Add by Judy ==========
+                    # Added by Judy >>>>>>>>>>>>>>>>>>>>
 
                     # print_message("docs", docs)
 
@@ -1204,7 +1204,7 @@ def process_file(
                         # print_message("return_info", [return_info])
                         return return_info
 
-                    # ========== Add by Judy ==========
+                    # <<<<<<<<<<<<<<<<<<<< Added by Judy
 
                     return {
                         "status": True,

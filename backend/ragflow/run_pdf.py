@@ -1,4 +1,4 @@
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 import logging
 import os
@@ -261,4 +261,4 @@ if __name__ == "__main__":
     chunks = KnowledgeHandler.prcoess_pdf(**args)
     print_message("parse and chunk", chunks)
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy

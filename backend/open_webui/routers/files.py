@@ -85,9 +85,9 @@ def upload_file(
     user=Depends(get_verified_user),
     file_metadata: dict = {},
     process: bool = Query(True),
-    use_ragflow: bool = Query(False),  # ========== Add by Judy ==========
-    chunk_token_num: int = Query(128),  # ========== Add by Judy ==========
-    delimiter: str = Query("\n。；！？"),  # ========== Add by Judy ==========
+    use_ragflow: bool = Query(False),  # >>>>>>>>>> Added by Judy <<<<<<<<<<
+    chunk_token_num: int = Query(128),  # >>>>>>>>>> Added by Judy <<<<<<<<<<
+    delimiter: str = Query("\n。；！？"),  # >>>>>>>>>> Added by Judy <<<<<<<<<<
 ):
     log.info(f"file.content_type: {file.content_type}")
     try:

@@ -18,12 +18,12 @@ import os
 import os.path
 from logging.handlers import RotatingFileHandler
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 initialized_root_logger = False
 initialized_ragflow_logger = False
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 def get_project_base_directory():
@@ -87,7 +87,7 @@ def init_root_logger(logfile_basename: str, log_format: str = "%(asctime)-15s %(
     logger.info(msg)
 
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
 
 def init_ragflow_logger(
     logfile_basename: str,
@@ -150,7 +150,7 @@ def init_ragflow_logger(
 
     return logger
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 # Changed by Judy >>>>>>>>>>>>>>>>>>>>

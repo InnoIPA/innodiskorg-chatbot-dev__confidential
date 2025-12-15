@@ -36,11 +36,12 @@ from ragflow.api.constants import SERVICE_CONF  # >>>>>>>>>> Changed by Judy <<<
 
 from . import file_utils
 
-# ========== Add by Judy ==========
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
 # RAGFlow logger
 ragflow_logger = logging.getLogger("ragflow")
 
-# ========== Add by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
 
 
 def conf_realpath(conf_name):
