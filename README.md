@@ -57,6 +57,7 @@ http://localhost:8080/docs
 
 ### Step 2:
 啟動前端:
+node版本要大於22.10.0
 於專案根目錄下安裝套件
 ```
 npm install

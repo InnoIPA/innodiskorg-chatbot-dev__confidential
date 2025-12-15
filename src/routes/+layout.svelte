@@ -630,7 +630,7 @@
 
 		<div class="flex flex-col h-screen">
 			<div style="width:100%;height:56px;background-color:#E61F23;padding-top:16px">
-				<img src={`${WEBUI_BASE_URL}/AccelBrain.png`} style="width:160px;height:24px; margin-left:45px;cursor:pointer" alt="logo" on:click={() => {
+				<img src={`${WEBUI_BASE_URL}/static/AccelBrain.png`} style="width:160px;height:24px; margin-left:45px;cursor:pointer" alt="logo" on:click={() => {
 					window.location.href = `${WEBUI_BASE_URL}/`;
 				}}/>
 			</div>
