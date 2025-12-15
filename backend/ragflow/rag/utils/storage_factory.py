@@ -17,7 +17,8 @@
 import os
 from enum import Enum
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.utils.azure_sas_conn import RAGFlowAzureSasBlob
 from ragflow.rag.utils.azure_spn_conn import RAGFlowAzureSpnBlob
 from ragflow.rag.utils.minio_conn import RAGFlowMinio
@@ -25,7 +26,7 @@ from ragflow.rag.utils.opendal_conn import OpenDALStorage
 from ragflow.rag.utils.oss_conn import RAGFlowOSS
 from ragflow.rag.utils.s3_conn import RAGFlowS3
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class Storage(Enum):

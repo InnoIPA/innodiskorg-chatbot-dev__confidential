@@ -16,10 +16,11 @@
 
 import json
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.deepdoc.parser.resume.entities import degrees, industries, regions
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 FIELDS = [
 "address STRING",

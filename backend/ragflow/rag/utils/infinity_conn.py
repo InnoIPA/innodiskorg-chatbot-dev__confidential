@@ -28,7 +28,8 @@ from infinity.connection_pool import ConnectionPool
 from infinity.errors import ErrorCode
 from infinity.index import IndexInfo, IndexType
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.rag import settings
 from ragflow.rag.settings import PAGERANK_FLD, TAG_FLD
@@ -42,7 +43,7 @@ from ragflow.rag.utils.doc_store_conn import (
     OrderByExpr,
 )
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 logger = logging.getLogger('ragflow.infinity_conn')
 

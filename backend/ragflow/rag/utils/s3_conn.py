@@ -22,11 +22,12 @@ import boto3
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag import settings
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -104,7 +105,7 @@ class RAGFlowS3:
             
             self.conn = [boto3.client('s3', **s3_params)]
         except Exception:
-            ragflow_logger.exception(f"Fail to connect at region {self.region_name} or endpoint {self.endpoint_url}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail to connect at region {self.region_name} or endpoint {self.endpoint_url}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __close__(self):
         del self.conn[0]
@@ -113,11 +114,11 @@ class RAGFlowS3:
     @use_default_bucket
     def bucket_exists(self, bucket, *args, **kwargs):
         try:
-            ragflow_logger.debug(f"head_bucket bucketname {bucket}")  # ========== Change by Judy ==========
+            ragflow_logger.debug(f"head_bucket bucketname {bucket}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.conn[0].head_bucket(Bucket=bucket)
             exists = True
         except ClientError:
-            ragflow_logger.exception(f"head_bucket error {bucket}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"head_bucket error {bucket}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             exists = False
         return exists
 
@@ -127,7 +128,7 @@ class RAGFlowS3:
         fnm, binary = f"{self.prefix_path}/{fnm}" if self.prefix_path else fnm, b"_t@@@1"
         if not self.bucket_exists(bucket):
             self.conn[0].create_bucket(Bucket=bucket)
-            ragflow_logger.debug(f"create bucket {bucket} ********")  # ========== Change by Judy ==========
+            ragflow_logger.debug(f"create bucket {bucket} ********")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         r = self.conn[0].upload_fileobj(BytesIO(binary), bucket, fnm)
         return r
@@ -141,17 +142,17 @@ class RAGFlowS3:
     @use_prefix_path
     @use_default_bucket
     def put(self, bucket, fnm, binary, *args, **kwargs):
-        ragflow_logger.debug(f"bucket name {bucket}; filename :{fnm}:")  # ========== Change by Judy ==========
+        ragflow_logger.debug(f"bucket name {bucket}; filename :{fnm}:")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         for _ in range(1):
             try:
                 if not self.bucket_exists(bucket):
                     self.conn[0].create_bucket(Bucket=bucket)
-                    ragflow_logger.info(f"create bucket {bucket} ********")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"create bucket {bucket} ********")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 r = self.conn[0].upload_fileobj(BytesIO(binary), bucket, fnm)
 
                 return r
             except Exception:
-                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
 
@@ -161,7 +162,7 @@ class RAGFlowS3:
         try:
             self.conn[0].delete_object(Bucket=bucket, Key=fnm)
         except Exception:
-            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     @use_prefix_path
     @use_default_bucket
@@ -172,7 +173,7 @@ class RAGFlowS3:
                 object_data = r['Body'].read()
                 return object_data
             except Exception:
-                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -201,7 +202,7 @@ class RAGFlowS3:
 
                 return r
             except Exception:
-                ragflow_logger.exception(f"fail get url {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get url {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -217,4 +218,4 @@ class RAGFlowS3:
                 conn.delete_bucket(Bucket=bucket)
                 return
             except Exception as e:
-                ragflow_logger.error(f"Fail rm {bucket}: " + str(e))  # ========== Change by Judy ==========
+                ragflow_logger.error(f"Fail rm {bucket}: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<

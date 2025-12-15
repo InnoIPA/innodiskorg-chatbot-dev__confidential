@@ -23,14 +23,15 @@ import cv2
 import numpy as np
 from huggingface_hub import snapshot_download
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.deepdoc.vision.operators import nms
 
 # from ragflow.deepdoc.vision import Recognizer
 from .recognizer import Recognizer
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class LayoutRecognizer(Recognizer):

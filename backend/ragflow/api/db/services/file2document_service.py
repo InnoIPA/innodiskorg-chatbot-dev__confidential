@@ -15,14 +15,15 @@
 #
 from datetime import datetime
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import FileSource
 from ragflow.api.db.db_models import DB, File, File2Document
 from ragflow.api.db.services.common_service import CommonService
 from ragflow.api.db.services.document_service import DocumentService
 from ragflow.api.utils import current_timestamp, datetime_format
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class File2DocumentService(CommonService):

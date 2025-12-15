@@ -18,11 +18,12 @@ from functools import reduce
 
 from playhouse.pool import PooledMySQLDatabase
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db.db_models import DB, DataBaseModel
 from ragflow.api.utils import current_timestamp, timestamp_to_date
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 @DB.connection_context()

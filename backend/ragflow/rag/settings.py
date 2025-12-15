@@ -16,11 +16,12 @@
 import logging
 import os
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils import decrypt_database_config, get_base_config
 from ragflow.api.utils.file_utils import get_project_base_directory
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -77,13 +78,13 @@ PARALLEL_DEVICES = 0
 try:
     import torch.cuda
     PARALLEL_DEVICES = torch.cuda.device_count()
-    ragflow_logger.info(f"found {PARALLEL_DEVICES} gpus")  # ========== Change by Judy ==========
+    ragflow_logger.info(f"found {PARALLEL_DEVICES} gpus")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 except Exception:
-    ragflow_logger.info("can't import package 'torch'")  # ========== Change by Judy ==========
+    ragflow_logger.info("can't import package 'torch'")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 def print_rag_settings():
-    ragflow_logger.info(f"MAX_CONTENT_LENGTH: {DOC_MAXIMUM_SIZE}")  # ========== Change by Judy ==========
-    ragflow_logger.info(f"MAX_FILE_COUNT_PER_USER: {int(os.environ.get('MAX_FILE_NUM_PER_USER', 0))}")  # ========== Change by Judy ==========
+    ragflow_logger.info(f"MAX_CONTENT_LENGTH: {DOC_MAXIMUM_SIZE}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    ragflow_logger.info(f"MAX_FILE_COUNT_PER_USER: {int(os.environ.get('MAX_FILE_NUM_PER_USER', 0))}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def get_svr_queue_name(priority: int) -> str:

@@ -22,10 +22,11 @@ import time
 
 from nltk.corpus import wordnet
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.file_utils import get_project_base_directory
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -44,14 +45,14 @@ class Dealer:
         try:
             self.dictionary = json.load(open(path, 'r'))
         except Exception:
-            ragflow_logger.warning("Missing synonym.json")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Missing synonym.json")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.dictionary = {}
 
         if not redis:
             ragflow_logger.warning(
-                "Realtime synonym is disabled, since no redis connection.")  # ========== Change by Judy ==========
+                "Realtime synonym is disabled, since no redis connection.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if not len(self.dictionary.keys()):
-            ragflow_logger.warning("Fail to load synonym")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Fail to load synonym")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         self.redis = redis
         self.load()
@@ -75,7 +76,7 @@ class Dealer:
             d = json.loads(d)
             self.dictionary = d
         except Exception as e:
-            ragflow_logger.error("Fail to load synonym!" + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.error("Fail to load synonym!" + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def lookup(self, tk, topn=8):
         if re.match(r"[a-z]+$", tk):

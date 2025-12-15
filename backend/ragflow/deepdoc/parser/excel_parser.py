@@ -19,10 +19,11 @@ from io import BytesIO
 import pandas as pd
 from openpyxl import Workbook, load_workbook
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import find_codec
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -46,7 +47,7 @@ class RAGFlowExcelParser:
         file_like_object.seek(0)
 
         if not (file_head.startswith(b'PK\x03\x04') or file_head.startswith(b'\xD0\xCF\x11\xE0')):
-            ragflow_logger.info("Not an Excel file, converting CSV to Excel Workbook")  # ========== Change by Judy ==========
+            ragflow_logger.info("Not an Excel file, converting CSV to Excel Workbook")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
             try:
                 file_like_object.seek(0)
@@ -59,14 +60,14 @@ class RAGFlowExcelParser:
         try:
             return load_workbook(file_like_object,data_only= True)
         except Exception as e:
-            ragflow_logger.info(f"openpyxl load error: {e}, try pandas instead")  # ========== Change by Judy ==========
+            ragflow_logger.info(f"openpyxl load error: {e}, try pandas instead")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             try:
                 file_like_object.seek(0)
                 try:
                     df = pd.read_excel(file_like_object)
                     return RAGFlowExcelParser._dataframe_to_workbook(df)
                 except Exception as ex:
-                    ragflow_logger.info(f"pandas with default engine load error: {ex}, try calamine instead")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"pandas with default engine load error: {ex}, try calamine instead")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     file_like_object.seek(0)
                     df = pd.read_excel(file_like_object, engine='calamine')
                     return RAGFlowExcelParser._dataframe_to_workbook(df)

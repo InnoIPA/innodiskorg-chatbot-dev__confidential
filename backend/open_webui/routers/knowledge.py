@@ -304,7 +304,7 @@ async def get_knowledge_by_id(id: str, user=Depends(get_verified_user)):
             file_ids = knowledge.data.get("file_ids", []) if knowledge.data else []
             files = Files.get_files_by_ids(file_ids)
 
-            # ========== Change by Judy ==========
+            # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
             HelperFunction.add_ragflow_results(files)
 
@@ -320,7 +320,7 @@ async def get_knowledge_by_id(id: str, user=Depends(get_verified_user)):
 
             return knowledge_files
 
-            # ========== Change by Judy ==========
+            # <<<<<<<<<<<<<<<<<<<< Changed by Judy
     else:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -450,7 +450,7 @@ def add_file_to_knowledge_by_id(
             if knowledge:
                 files = Files.get_files_by_ids(file_ids)
 
-                # ========== Change by Judy ==========
+                # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
                 HelperFunction.add_ragflow_results(files)
 
@@ -466,7 +466,7 @@ def add_file_to_knowledge_by_id(
 
                 return knowledge_files
 
-                # ========== Change by Judy ==========
+                # <<<<<<<<<<<<<<<<<<<< Changed by Judy
             else:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
@@ -634,7 +634,7 @@ def remove_file_from_knowledge_by_id(
             if knowledge:
                 files = Files.get_files_by_ids(file_ids)
 
-                # ========== Change by Judy ==========
+                # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
                 HelperFunction.add_ragflow_results(files)
 
@@ -650,7 +650,7 @@ def remove_file_from_knowledge_by_id(
 
                 return knowledge_files
 
-                # ========== Change by Judy ==========
+                # <<<<<<<<<<<<<<<<<<<< Changed by Judy
             else:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,

@@ -19,7 +19,8 @@ from datetime import datetime
 
 import peewee
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import StatusEnum, UserTenantRole
 from ragflow.api.db.db_models import DB, Tenant, User, UserTenant
 from ragflow.api.db.services.common_service import CommonService
@@ -27,7 +28,7 @@ from ragflow.api.utils import current_timestamp, datetime_format, get_uuid
 from ragflow.rag.settings import MINIO
 from werkzeug.security import check_password_hash, generate_password_hash
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -55,17 +56,17 @@ class UserService(CommonService):
             
             # Reject empty, None, or whitespace-only access tokens
             if not access_token or not str(access_token).strip():
-                ragflow_logger.warning("UserService.query: Rejecting empty access_token query")  # ========== Change by Judy ==========
+                ragflow_logger.warning("UserService.query: Rejecting empty access_token query")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 return cls.model.select().where(cls.model.id == "INVALID_EMPTY_TOKEN")  # Returns empty result
             
             # Reject tokens that are too short (should be UUID, 32+ chars)
             if len(str(access_token).strip()) < 32:
-                ragflow_logger.warning(f"UserService.query: Rejecting short access_token query: {len(str(access_token))} chars")  # ========== Change by Judy ==========
+                ragflow_logger.warning(f"UserService.query: Rejecting short access_token query: {len(str(access_token))} chars")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 return cls.model.select().where(cls.model.id == "INVALID_SHORT_TOKEN")  # Returns empty result
             
             # Reject tokens that start with "INVALID_" (from logout)
             if str(access_token).startswith("INVALID_"):
-                ragflow_logger.warning("UserService.query: Rejecting invalidated access_token")  # ========== Change by Judy ==========
+                ragflow_logger.warning("UserService.query: Rejecting invalidated access_token")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 return cls.model.select().where(cls.model.id == "INVALID_LOGOUT_TOKEN")  # Returns empty result
         
         # Call parent query method for valid requests

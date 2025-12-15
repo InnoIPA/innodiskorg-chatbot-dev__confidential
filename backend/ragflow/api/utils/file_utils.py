@@ -28,11 +28,13 @@ import pdfplumber
 from cachetools import LRUCache, cached
 from PIL import Image
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.constants import IMG_BASE64_PREFIX
 from ragflow.api.db import FileType
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from ruamel.yaml import YAML
 
 PROJECT_BASE = os.getenv("RAG_PROJECT_BASE") or os.getenv("RAG_DEPLOY_BASE")

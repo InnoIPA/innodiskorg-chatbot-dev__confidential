@@ -42,11 +42,12 @@ from peewee import (
 from playhouse.migrate import MySQLMigrator, PostgresqlMigrator, migrate
 from playhouse.pool import PooledMySQLDatabase, PooledPostgresqlDatabase
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings, utils
 from ragflow.api.db import ParserType, SerializedType
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -278,11 +279,11 @@ class RetryingPooledMySQLDatabase(PooledMySQLDatabase):
                 return super().execute_sql(sql, params, commit)
             except OperationalError as e:
                 if e.args[0] in (2013, 2006) and attempt < self.max_retries:
-                    ragflow_logger.warning(f"Lost connection (attempt {attempt + 1}/{self.max_retries}): {e}")  # ========== Change by Judy ==========
+                    ragflow_logger.warning(f"Lost connection (attempt {attempt + 1}/{self.max_retries}): {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     self._handle_connection_loss()
                     time.sleep(self.retry_delay * (2**attempt))
                 else:
-                    ragflow_logger.error(f"DB execution failure: {e}")  # ========== Change by Judy ==========
+                    ragflow_logger.error(f"DB execution failure: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     raise
         return None
 
@@ -298,7 +299,7 @@ class RetryingPooledMySQLDatabase(PooledMySQLDatabase):
                 return super().begin()
             except OperationalError as e:
                 if e.args[0] in (2013, 2006) and attempt < self.max_retries:
-                    ragflow_logger.warning(f"Lost connection during transaction (attempt {attempt + 1}/{self.max_retries})")  # ========== Change by Judy ==========
+                    ragflow_logger.warning(f"Lost connection during transaction (attempt {attempt + 1}/{self.max_retries})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     self._handle_connection_loss()
                     time.sleep(self.retry_delay * (2**attempt))
                 else:
@@ -321,7 +322,7 @@ class BaseDataBase:
         database_config = settings.DATABASE.copy()
         db_name = database_config.pop("name")
         self.database_connection = PooledDatabase[settings.DATABASE_TYPE.upper()].value(db_name, **database_config)
-        ragflow_logger.info("init database on cluster mode successfully")  # ========== Change by Judy ==========
+        ragflow_logger.info("init database on cluster mode successfully")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def with_retry(max_retries=3, retry_delay=1.0):
@@ -351,10 +352,10 @@ def with_retry(max_retries=3, retry_delay=1.0):
 
                     if retry < max_retries - 1:
                         current_delay = retry_delay * (2**retry)
-                        ragflow_logger.warning(f"{func_name} {lock_name} failed: {str(e)}, retrying ({retry + 1}/{max_retries})")  # ========== Change by Judy ==========
+                        ragflow_logger.warning(f"{func_name} {lock_name} failed: {str(e)}, retrying ({retry + 1}/{max_retries})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         time.sleep(current_delay)
                     else:
-                        ragflow_logger.error(f"{func_name} {lock_name} failed after all attempts: {str(e)}")  # ========== Change by Judy ==========
+                        ragflow_logger.error(f"{func_name} {lock_name} failed after all attempts: {str(e)}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
             if last_exception:
                 raise last_exception
@@ -473,7 +474,7 @@ def close_connection():
         if DB:
             DB.close_stale(age=30)
     except Exception as e:
-        ragflow_logger.exception(e)  # ========== Change by Judy ==========
+        ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 class DataBaseModel(BaseModel):
@@ -492,18 +493,18 @@ def init_database_tables(alter_fields=[]):
             table_objs.append(obj)
 
             if not obj.table_exists():
-                ragflow_logger.debug(f"start create table {obj.__name__}")  # ========== Change by Judy ==========
+                ragflow_logger.debug(f"start create table {obj.__name__}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 try:
                     obj.create_table(safe=True)
-                    ragflow_logger.debug(f"create table success: {obj.__name__}")  # ========== Change by Judy ==========
+                    ragflow_logger.debug(f"create table success: {obj.__name__}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 except Exception as e:
-                    ragflow_logger.exception(e)  # ========== Change by Judy ==========
+                    ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     create_failed_list.append(obj.__name__)
             else:
-                ragflow_logger.debug(f"table {obj.__name__} already exists, skip creation.")  # ========== Change by Judy ==========
+                ragflow_logger.debug(f"table {obj.__name__} already exists, skip creation.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     if create_failed_list:
-        ragflow_logger.error(f"create tables failed: {create_failed_list}")  # ========== Change by Judy ==========
+        ragflow_logger.error(f"create tables failed: {create_failed_list}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         raise Exception(f"create tables failed: {create_failed_list}")
     migrate_db()
 

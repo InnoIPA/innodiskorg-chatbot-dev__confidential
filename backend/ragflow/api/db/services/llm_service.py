@@ -19,12 +19,13 @@ import re
 from functools import partial
 from typing import Generator
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db.db_models import LLM
 from ragflow.api.db.services.common_service import CommonService
 from ragflow.api.db.services.tenant_llm_service import LLM4Tenant, TenantLLMService
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -98,7 +99,7 @@ class LLMBundle(LLM4Tenant):
 
     def bind_tools(self, toolcall_session, tools):
         if not self.is_tools:
-            ragflow_logger.warning(f"Model {self.llm_name} does not support tool call, but you have assigned one or more tools to it!")  # ========== Change by Judy ==========
+            ragflow_logger.warning(f"Model {self.llm_name} does not support tool call, but you have assigned one or more tools to it!")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return
         self.mdl.bind_tools(toolcall_session, tools)
 
@@ -109,7 +110,7 @@ class LLMBundle(LLM4Tenant):
         embeddings, used_tokens = self.mdl.encode(texts)
         llm_name = getattr(self, "llm_name", None)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens, llm_name):
-            ragflow_logger.error("LLMBundle.encode can't update token usage for {}/EMBEDDING used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.encode can't update token usage for {}/EMBEDDING used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(usage_details={"total_tokens": used_tokens})
@@ -124,7 +125,7 @@ class LLMBundle(LLM4Tenant):
         emd, used_tokens = self.mdl.encode_queries(query)
         llm_name = getattr(self, "llm_name", None)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens, llm_name):
-            ragflow_logger.error("LLMBundle.encode_queries can't update token usage for {}/EMBEDDING used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.encode_queries can't update token usage for {}/EMBEDDING used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(usage_details={"total_tokens": used_tokens})
@@ -138,7 +139,7 @@ class LLMBundle(LLM4Tenant):
 
         sim, used_tokens = self.mdl.similarity(query, texts)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens):
-            ragflow_logger.error("LLMBundle.similarity can't update token usage for {}/RERANK used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.similarity can't update token usage for {}/RERANK used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(usage_details={"total_tokens": used_tokens})
@@ -152,7 +153,7 @@ class LLMBundle(LLM4Tenant):
 
         txt, used_tokens = self.mdl.describe(image)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens):
-            ragflow_logger.error("LLMBundle.describe can't update token usage for {}/IMAGE2TEXT used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.describe can't update token usage for {}/IMAGE2TEXT used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(output={"output": txt}, usage_details={"total_tokens": used_tokens})
@@ -166,7 +167,7 @@ class LLMBundle(LLM4Tenant):
 
         txt, used_tokens = self.mdl.describe_with_prompt(image, prompt)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens):
-            ragflow_logger.error("LLMBundle.describe can't update token usage for {}/IMAGE2TEXT used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.describe can't update token usage for {}/IMAGE2TEXT used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(output={"output": txt}, usage_details={"total_tokens": used_tokens})
@@ -180,7 +181,7 @@ class LLMBundle(LLM4Tenant):
 
         txt, used_tokens = self.mdl.transcription(audio)
         if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens):
-            ragflow_logger.error("LLMBundle.transcription can't update token usage for {}/SEQUENCE2TXT used_tokens: {}".format(self.tenant_id, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.transcription can't update token usage for {}/SEQUENCE2TXT used_tokens: {}".format(self.tenant_id, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(output={"output": txt}, usage_details={"total_tokens": used_tokens})
@@ -195,7 +196,7 @@ class LLMBundle(LLM4Tenant):
         for chunk in self.mdl.tts(text):
             if isinstance(chunk, int):
                 if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, chunk, self.llm_name):
-                    ragflow_logger.error("LLMBundle.tts can't update token usage for {}/TTS".format(self.tenant_id))  # ========== Change by Judy ==========
+                    ragflow_logger.error("LLMBundle.tts can't update token usage for {}/TTS".format(self.tenant_id))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 return
             yield chunk
 
@@ -249,7 +250,7 @@ class LLMBundle(LLM4Tenant):
             txt = re.sub(r"<tool_call>.*?</tool_call>", "", txt, flags=re.DOTALL)
 
         if isinstance(txt, int) and not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, used_tokens, self.llm_name):
-            ragflow_logger.error("LLMBundle.chat can't update token usage for {}/CHAT llm_name: {}, used_tokens: {}".format(self.tenant_id, self.llm_name, used_tokens))  # ========== Change by Judy ==========
+            ragflow_logger.error("LLMBundle.chat can't update token usage for {}/CHAT llm_name: {}, used_tokens: {}".format(self.tenant_id, self.llm_name, used_tokens))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if self.langfuse:
             generation.update(output={"output": txt}, usage_details={"total_tokens": used_tokens})
@@ -286,4 +287,4 @@ class LLMBundle(LLM4Tenant):
 
         if total_tokens > 0:
             if not TenantLLMService.increase_usage(self.tenant_id, self.llm_type, txt, self.llm_name):
-                ragflow_logger.error("LLMBundle.chat_streamly can't update token usage for {}/CHAT llm_name: {}, content: {}".format(self.tenant_id, self.llm_name, txt))  # ========== Change by Judy ==========
+                ragflow_logger.error("LLMBundle.chat_streamly can't update token usage for {}/CHAT llm_name: {}, content: {}".format(self.tenant_id, self.llm_name, txt))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<

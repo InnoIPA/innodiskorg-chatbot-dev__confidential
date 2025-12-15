@@ -17,7 +17,8 @@ import logging
 import re
 from functools import partial
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.agentic_reasoning.prompts import (
     BEGIN_SEARCH_QUERY,
     BEGIN_SEARCH_RESULT,
@@ -32,7 +33,7 @@ from ragflow.rag.nlp import extract_between
 from ragflow.rag.prompts import kb_prompt
 from ragflow.rag.utils.tavily_conn import Tavily
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -119,7 +120,7 @@ class DeepResearcher:
         try:
             kbinfos = self._kb_retrieve(question=search_query) if self._kb_retrieve else {"chunks": [], "doc_aggs": []}
         except Exception as e:
-            ragflow_logger.error(f"Knowledge base retrieval error: {e}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Knowledge base retrieval error: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         # 2. Web retrieval (if Tavily API is configured)
         try:
@@ -129,7 +130,7 @@ class DeepResearcher:
                 kbinfos["chunks"].extend(tav_res["chunks"])
                 kbinfos["doc_aggs"].extend(tav_res["doc_aggs"])
         except Exception as e:
-            ragflow_logger.error(f"Web retrieval error: {e}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Web retrieval error: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         # 3. Knowledge graph retrieval (if configured)
         try:
@@ -138,7 +139,7 @@ class DeepResearcher:
                 if ck["content_with_weight"]:
                     kbinfos["chunks"].insert(0, ck)
         except Exception as e:
-            ragflow_logger.error(f"Knowledge graph retrieval error: {e}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Knowledge graph retrieval error: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         return kbinfos
 
@@ -212,7 +213,7 @@ class DeepResearcher:
 
             # Process each search query
             for search_query in queries:
-                ragflow_logger.info(f"[THINK]Query: {step_index}. {search_query}")  # ========== Change by Judy ==========
+                ragflow_logger.info(f"[THINK]Query: {step_index}. {search_query}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 msg_history.append({"role": "assistant", "content": search_query})
                 think += f"\n\n> {step_index + 1}. {search_query}\n\n"
                 yield {"answer": think + "</think>", "reference": {}, "audio_binary": None}
@@ -248,6 +249,6 @@ class DeepResearcher:
                 msg_history.append(
                     {"role": "user", "content": f"\n\n{BEGIN_SEARCH_RESULT}{summary_think}{END_SEARCH_RESULT}\n\n"})
                 think += self._remove_result_tags(summary_think)
-                ragflow_logger.info(f"[THINK]Summary: {step_index}. {summary_think}")  # ========== Change by Judy ==========
+                ragflow_logger.info(f"[THINK]Summary: {step_index}. {summary_think}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         yield think + "</think>"

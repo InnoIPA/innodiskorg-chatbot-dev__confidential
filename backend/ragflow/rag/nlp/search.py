@@ -21,7 +21,8 @@ from dataclasses import dataclass
 
 import numpy as np
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import query, rag_tokenizer
 from ragflow.rag.settings import PAGERANK_FLD, TAG_FLD
 from ragflow.rag.utils import get_float, rmSpace
@@ -32,7 +33,7 @@ from ragflow.rag.utils.doc_store_conn import (
     OrderByExpr,
 )
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -111,7 +112,7 @@ class Dealer:
                 orderBy.desc("create_timestamp_flt")
             res = self.dataStore.search(src, [], filters, [], orderBy, offset, limit, idx_names, kb_ids)
             total = self.dataStore.getTotal(res)
-            ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # ========== Change by Judy ==========
+            ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         else:
             highlightFields = ["content_ltks", "title_tks"] if highlight else []
             matchText, keywords = self.qryr.question(qst, min_match=0.3)
@@ -120,7 +121,7 @@ class Dealer:
                 res = self.dataStore.search(src, highlightFields, filters, matchExprs, orderBy, offset, limit,
                                             idx_names, kb_ids, rank_feature=rank_feature)
                 total = self.dataStore.getTotal(res)
-                ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # ========== Change by Judy ==========
+                ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             else:
                 matchDense = self.get_vector(qst, emb_mdl, topk, req.get("similarity", 0.1))
                 q_vec = matchDense.embedding_data
@@ -132,7 +133,7 @@ class Dealer:
                 res = self.dataStore.search(src, highlightFields, filters, matchExprs, orderBy, offset, limit,
                                             idx_names, kb_ids, rank_feature=rank_feature)
                 total = self.dataStore.getTotal(res)
-                ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # ========== Change by Judy ==========
+                ragflow_logger.debug("Dealer.search TOTAL: {}".format(total))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
                 # If result is empty, try again with lower min_match
                 if total == 0:
@@ -145,7 +146,7 @@ class Dealer:
                         res = self.dataStore.search(src, highlightFields, filters, [matchText, matchDense, fusionExpr],
                                                     orderBy, offset, limit, idx_names, kb_ids, rank_feature=rank_feature)
                         total = self.dataStore.getTotal(res)
-                    ragflow_logger.debug("Dealer.search 2 TOTAL: {}".format(total))  # ========== Change by Judy ==========
+                    ragflow_logger.debug("Dealer.search 2 TOTAL: {}".format(total))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
             for k in keywords:
                 kwds.add(k)
@@ -156,7 +157,7 @@ class Dealer:
                         continue
                     kwds.add(kk)
 
-        ragflow_logger.debug(f"TOTAL: {total}")  # ========== Change by Judy ==========
+        ragflow_logger.debug(f"TOTAL: {total}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         ids = self.dataStore.getChunkIds(res)
         keywords = list(kwds)
         highlight = self.dataStore.getHighlight(res, keywords, "content_with_weight")
@@ -213,7 +214,7 @@ class Dealer:
                 continue
             idx.append(i)
             pieces_.append(t)
-        ragflow_logger.debug("{} => {}".format(answer, pieces_))  # ========== Change by Judy ==========
+        ragflow_logger.debug("{} => {}".format(answer, pieces_))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if not pieces_:
             return answer, set([])
 
@@ -221,7 +222,7 @@ class Dealer:
         for i in range(len(chunk_v)):
             if len(ans_v[0]) != len(chunk_v[i]):
                 chunk_v[i] = [0.0]*len(ans_v[0])
-                ragflow_logger.warning("The dimension of query and chunk do not match: {} vs. {}".format(len(ans_v[0]), len(chunk_v[i])))  # ========== Change by Judy ==========
+                ragflow_logger.warning("The dimension of query and chunk do not match: {} vs. {}".format(len(ans_v[0]), len(chunk_v[i])))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         assert len(ans_v[0]) == len(chunk_v[0]), "The dimension of query and chunk do not match: {} vs. {}".format(
             len(ans_v[0]), len(chunk_v[0]))
@@ -239,7 +240,7 @@ class Dealer:
                                                                 chunks_tks,
                                                                 tkweight, vtweight)
                 mx = np.max(sim) * 0.99
-                ragflow_logger.debug("{} SIM: {}".format(pieces_[i], mx))  # ========== Change by Judy ==========
+                ragflow_logger.debug("{} SIM: {}".format(pieces_[i], mx))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 if mx < thr:
                     continue
                 cites[idx[i]] = list(

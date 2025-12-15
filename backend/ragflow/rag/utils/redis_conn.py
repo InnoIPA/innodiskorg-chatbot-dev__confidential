@@ -21,11 +21,13 @@ import uuid
 import trio
 import valkey as redis
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag import settings
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from valkey.lock import Lock
 
 # ========== Add by Judy ==========
@@ -48,7 +50,7 @@ class RedisMsg:
             self.__consumer.xack(self.__queue_name, self.__group_name, self.__msg_id)
             return True
         except Exception as e:
-            ragflow_logger.warning("[EXCEPTION]ack" + str(self.__queue_name) + "||" + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("[EXCEPTION]ack" + str(self.__queue_name) + "||" + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return False
 
     def get_message(self):
@@ -91,7 +93,7 @@ class RedisDB:
             )
             self.register_scripts()
         except Exception:
-            ragflow_logger.warning("Redis can't be connected.")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Redis can't be connected.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return self.REDIS
 
     def health(self):
@@ -111,7 +113,7 @@ class RedisDB:
         try:
             return self.REDIS.exists(k)
         except Exception as e:
-            ragflow_logger.warning("RedisDB.exist " + str(k) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.exist " + str(k) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
 
     def get(self, k):
@@ -120,7 +122,7 @@ class RedisDB:
         try:
             return self.REDIS.get(k)
         except Exception as e:
-            ragflow_logger.warning("RedisDB.get " + str(k) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.get " + str(k) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
 
     def set_obj(self, k, obj, exp=3600):
@@ -128,7 +130,7 @@ class RedisDB:
             self.REDIS.set(k, json.dumps(obj, ensure_ascii=False), exp)
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.set_obj " + str(k) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.set_obj " + str(k) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -137,7 +139,7 @@ class RedisDB:
             self.REDIS.set(k, v, exp)
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.set " + str(k) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.set " + str(k) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -146,7 +148,7 @@ class RedisDB:
             self.REDIS.sadd(key, member)
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.sadd " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.sadd " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -155,7 +157,7 @@ class RedisDB:
             self.REDIS.srem(key, member)
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.srem " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.srem " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -166,7 +168,7 @@ class RedisDB:
         except Exception as e:
             ragflow_logger.warning(
                 "RedisDB.smembers " + str(key) + " got exception: " + str(e)
-            )  # ========== Change by Judy ==========
+            )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return None
 
@@ -175,7 +177,7 @@ class RedisDB:
             self.REDIS.zadd(key, {member: score})
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.zadd " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.zadd " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -184,7 +186,7 @@ class RedisDB:
             res = self.REDIS.zcount(key, min, max)
             return res
         except Exception as e:
-            ragflow_logger.warning("RedisDB.zcount " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.zcount " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return 0
 
@@ -193,7 +195,7 @@ class RedisDB:
             res = self.REDIS.zpopmin(key, count)
             return res
         except Exception as e:
-            ragflow_logger.warning("RedisDB.zpopmin " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.zpopmin " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return None
 
@@ -204,7 +206,7 @@ class RedisDB:
         except Exception as e:
             ragflow_logger.warning(
                 "RedisDB.zrangebyscore " + str(key) + " got exception: " + str(e)
-            )  # ========== Change by Judy ==========
+            )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return None
 
@@ -217,7 +219,7 @@ class RedisDB:
         except Exception as e:
             ragflow_logger.warning(
                 "RedisDB.transaction " + str(key) + " got exception: " + str(e)
-            )  # ========== Change by Judy ==========
+            )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 
@@ -230,7 +232,7 @@ class RedisDB:
             except Exception as e:
                 ragflow_logger.exception(
                     "RedisDB.queue_product " + str(queue) + " got exception: " + str(e)
-                )  # ========== Change by Judy ==========
+                )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
         return False
 
@@ -247,7 +249,7 @@ class RedisDB:
                     if "no such key" in str(e).lower():
                         self.REDIS.xgroup_create(queue_name, group_name, id="0", mkstream=True)
                     elif "busygroup" in str(e).lower():
-                        ragflow_logger.warning("Group already exists, continue.")  # ========== Change by Judy ==========
+                        ragflow_logger.warning("Group already exists, continue.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         pass
                     else:
                         raise
@@ -277,7 +279,7 @@ class RedisDB:
                         + str(queue_name)
                         + " got exception: "
                         + str(e)
-                    )  # ========== Change by Judy ==========
+                    )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     self.__open__()
         return None
 
@@ -288,10 +290,10 @@ class RedisDB:
                     group_info = self.REDIS.xinfo_groups(queue_name)
                 except Exception as e:
                     if str(e) == 'no such key':
-                        ragflow_logger.warning(f"RedisDB.get_unacked_iterator queue {queue_name} doesn't exist")  # ========== Change by Judy ==========
+                        ragflow_logger.warning(f"RedisDB.get_unacked_iterator queue {queue_name} doesn't exist")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         continue
                 if not any(gi["name"] == group_name for gi in group_info):
-                    ragflow_logger.warning(f"RedisDB.get_unacked_iterator queue {queue_name} group {group_name} doesn't exist")  # ========== Change by Judy ==========
+                    ragflow_logger.warning(f"RedisDB.get_unacked_iterator queue {queue_name} group {group_name} doesn't exist")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     continue
                 current_min = 0
                 while True:
@@ -299,12 +301,12 @@ class RedisDB:
                     if not payload:
                         break
                     current_min = payload.get_msg_id()
-                    ragflow_logger.info(f"RedisDB.get_unacked_iterator {queue_name} {consumer_name} {current_min}")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"RedisDB.get_unacked_iterator {queue_name} {consumer_name} {current_min}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     yield payload
         except Exception:
             ragflow_logger.exception(
                 "RedisDB.get_unacked_iterator got exception: "
-            )  # ========== Change by Judy ==========
+            )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
 
     def get_pending_msg(self, queue, group_name):
@@ -315,7 +317,7 @@ class RedisDB:
             if 'No such key' not in (str(e) or ''):
                 ragflow_logger.warning(
                     "RedisDB.get_pending_msg " + str(queue) + " got exception: " + str(e)
-                )  # ========== Change by Judy ==========
+                )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return []
 
     def requeue_msg(self, queue: str, group_name: str, msg_id: str):
@@ -328,7 +330,7 @@ class RedisDB:
             except Exception as e:
                 ragflow_logger.warning(
                     "RedisDB.get_pending_msg " + str(queue) + " got exception: " + str(e)
-                )  # ========== Change by Judy ==========
+                )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
 
     def queue_info(self, queue, group_name) -> dict | None:
@@ -341,7 +343,7 @@ class RedisDB:
             except Exception as e:
                 ragflow_logger.warning(
                     "RedisDB.queue_info " + str(queue) + " got exception: " + str(e)
-                )  # ========== Change by Judy ==========
+                )  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
         return None
 
@@ -357,7 +359,7 @@ class RedisDB:
             self.REDIS.delete(key)
             return True
         except Exception as e:
-            ragflow_logger.warning("RedisDB.delete " + str(key) + " got exception: " + str(e))  # ========== Change by Judy ==========
+            ragflow_logger.warning("RedisDB.delete " + str(key) + " got exception: " + str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.__open__()
         return False
 

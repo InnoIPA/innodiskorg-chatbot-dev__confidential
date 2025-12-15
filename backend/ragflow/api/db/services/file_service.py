@@ -21,7 +21,8 @@ from pathlib import Path
 from flask_login import current_user
 from peewee import fn
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import KNOWLEDGEBASE_FOLDER_NAME, FileSource, FileType, ParserType
 from ragflow.api.db.db_models import DB, Document, File, File2Document, Knowledgebase
 from ragflow.api.db.services import duplicate_name
@@ -37,7 +38,7 @@ from ragflow.api.utils.file_utils import (
 from ragflow.rag.llm.cv_model import GptV4
 from ragflow.rag.utils.storage_factory import STORAGE_IMPL
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -362,7 +363,7 @@ class FileService(CommonService):
                 cls.delete_folder_by_pf_id(user_id, file.id)
             return (cls.model.delete().where((cls.model.tenant_id == user_id) & (cls.model.id == folder_id)).execute(),)
         except Exception:
-            ragflow_logger.exception("delete_folder_by_pf_id")  # ========== Change by Judy ==========
+            ragflow_logger.exception("delete_folder_by_pf_id")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise RuntimeError("Database error (File retrieval)!")
 
     @classmethod
@@ -411,7 +412,7 @@ class FileService(CommonService):
         try:
             cls.filter_update((cls.model.id << file_ids,), {"parent_id": folder_id})
         except Exception:
-            ragflow_logger.exception("move_file")  # ========== Change by Judy ==========
+            ragflow_logger.exception("move_file")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise RuntimeError("Database error (File move)!")
 
     @classmethod

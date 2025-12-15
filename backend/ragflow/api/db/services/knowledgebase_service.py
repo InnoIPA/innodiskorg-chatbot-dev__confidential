@@ -17,7 +17,8 @@ from datetime import datetime
 
 from peewee import fn
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import StatusEnum, TenantPermission
 from ragflow.api.db.db_models import (
     DB,
@@ -30,7 +31,7 @@ from ragflow.api.db.db_models import (
 from ragflow.api.db.services.common_service import CommonService
 from ragflow.api.utils import current_timestamp, datetime_format
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class KnowledgebaseService(CommonService):

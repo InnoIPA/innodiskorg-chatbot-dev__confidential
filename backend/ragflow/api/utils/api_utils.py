@@ -39,7 +39,8 @@ from flask import send_file
 from itsdangerous import URLSafeTimedSerializer
 from peewee import OperationalError
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.constants import REQUEST_MAX_WAIT_SEC, REQUEST_WAIT_SEC
 from ragflow.api.db.db_models import APIToken
@@ -51,7 +52,8 @@ from ragflow.rag.utils.mcp_tool_call_conn import (
     close_multiple_mcp_toolcall_sessions,
 )
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from werkzeug.http import HTTP_STATUS_CODES
 
 # ========== Add by Judy ==========
@@ -139,7 +141,7 @@ def get_exponential_backoff_interval(retries, full_jitter=False):
 
 
 def get_data_error_result(code=settings.RetCode.DATA_ERROR, message="Sorry! Data missing!"):
-    ragflow_logger.exception(Exception(message))  # ========== Change by Judy ==========
+    ragflow_logger.exception(Exception(message))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     result_dict = {"code": code, "message": message}
     response = {}
     for key, value in result_dict.items():
@@ -151,7 +153,7 @@ def get_data_error_result(code=settings.RetCode.DATA_ERROR, message="Sorry! Data
 
 
 def server_error_response(e):
-    ragflow_logger.exception(e)  # ========== Change by Judy ==========
+    ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     try:
         if e.code == 401:
             return get_json_result(code=401, message=repr(e))
@@ -312,7 +314,7 @@ def construct_json_result(code=settings.RetCode.SUCCESS, message="success", data
 
 
 def construct_error_response(e):
-    ragflow_logger.exception(e)  # ========== Change by Judy ==========
+    ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     try:
         if e.code == 401:
             return construct_json_result(code=settings.RetCode.UNAUTHORIZED, message=repr(e))
@@ -561,7 +563,7 @@ def verify_embedding_availability(embd_id: str, tenant_id: str) -> tuple[bool, R
         if not (is_builtin_model or is_tenant_model):
             return False, get_error_argument_result(f"Unauthorized model: <{embd_id}>")
     except OperationalError as e:
-        ragflow_logger.exception(e)  # ========== Change by Judy ==========
+        ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return False, get_error_data_result(message="Database operation failed")
 
     return True, None

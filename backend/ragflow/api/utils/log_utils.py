@@ -153,7 +153,7 @@ def init_ragflow_logger(
 # ========== Add by Judy ==========
 
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
 def log_exception(e, *args):
     # RAGFlow logger
@@ -168,4 +168,4 @@ def log_exception(e, *args):
             ragflow_logger.error(str(a))
     raise e
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy

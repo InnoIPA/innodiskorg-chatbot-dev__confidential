@@ -19,11 +19,12 @@ import logging
 import re
 from collections import defaultdict
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import rag_tokenizer, synonym, term_weight
 from ragflow.rag.utils.doc_store_conn import MatchTextExpr
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -156,7 +157,7 @@ class FulltextQueryer:
             syns = self.syn.lookup(tt)
             if syns and len(keywords) < 32:
                 keywords.extend(syns)
-            ragflow_logger.debug(json.dumps(twts, ensure_ascii=False))  # ========== Change by Judy ==========
+            ragflow_logger.debug(json.dumps(twts, ensure_ascii=False))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             tms = []
             for tk, w in sorted(twts, key=lambda x: x[1] * -1):
                 sm = (

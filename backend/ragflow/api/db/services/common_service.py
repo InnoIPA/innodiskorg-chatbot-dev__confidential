@@ -17,11 +17,12 @@ from datetime import datetime
 
 import peewee
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db.db_models import DB
 from ragflow.api.utils import current_timestamp, datetime_format, get_uuid
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class CommonService:

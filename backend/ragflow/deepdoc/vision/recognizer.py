@@ -21,7 +21,7 @@ from functools import cmp_to_key
 
 import cv2
 import numpy as np
-from ragflow.api.utils.file_utils import get_project_base_directory    # ========== Change by Judy ==========
+from ragflow.api.utils.file_utils import get_project_base_directory    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 from . import operators
 from .ocr import load_model
@@ -428,7 +428,7 @@ class Recognizer:
             end_index = min((i + 1) * batch_size, len(images))
             batch_image_list = images[start_index:end_index]
             inputs = self.preprocess(batch_image_list)
-            ragflow_logger.debug("preprocess")  # ========== Change by Judy ==========
+            ragflow_logger.debug("preprocess")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             for ins in inputs:
                 bb = self.postprocess(self.ort_sess.run(None, {k:v for k,v in ins.items() if k in self.input_names}, self.run_options)[0], ins, thr)
                 res.append(bb)

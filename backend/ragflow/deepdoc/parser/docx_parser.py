@@ -21,10 +21,11 @@ from io import BytesIO
 import pandas as pd
 from docx import Document
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import rag_tokenizer
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class RAGFlowDocxParser:

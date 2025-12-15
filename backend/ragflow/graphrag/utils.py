@@ -23,7 +23,8 @@ import trio
 import xxhash
 from networkx.readwrite import json_graph
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.utils import get_uuid
 from ragflow.api.utils.api_utils import timeout
@@ -31,7 +32,7 @@ from ragflow.rag.nlp import rag_tokenizer, search
 from ragflow.rag.utils.doc_store_conn import OrderByExpr
 from ragflow.rag.utils.redis_conn import REDIS_CONN
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -581,7 +582,7 @@ async def get_entity_type2samples(idxnms, kb_ids: list):
         try:
             smp = json.loads(smp)
         except Exception as e:
-            ragflow_logger.exception(e)  # ========== Change by Judy ==========
+            ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         for ty, ents in smp.items():
             res[ty].extend(ents)

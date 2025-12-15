@@ -20,8 +20,8 @@ from collections import Counter
 
 import numpy as np
 from huggingface_hub import snapshot_download
-from ragflow.api.utils.file_utils import get_project_base_directory    # ========== Change by Judy ==========
-from ragflow.rag.nlp import rag_tokenizer                              # ========== Change by Judy ==========
+from ragflow.api.utils.file_utils import get_project_base_directory    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+from ragflow.rag.nlp import rag_tokenizer                              # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 from .recognizer import Recognizer
 
@@ -157,7 +157,7 @@ class TableStructureRecognizer(Recognizer):
             b["btype"] = TableStructureRecognizer.blockType(b)
         max_type = Counter([b["btype"] for b in boxes]).items()
         max_type = max(max_type, key=lambda x: x[1])[0] if max_type else ""
-        ragflow_logger.debug("MAXTYPE: " + max_type)  # ========== Change by Judy ==========
+        ragflow_logger.debug("MAXTYPE: " + max_type)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         rowh = [b["R_bott"] - b["R_top"] for b in boxes if "R" in b]
         rowh = np.min(rowh) if rowh else 0
@@ -228,7 +228,7 @@ class TableStructureRecognizer(Recognizer):
                     j += 1
                     continue
                 bx = tbl[ii][j][0]
-                ragflow_logger.debug("Relocate column single: " + bx["text"])  # ========== Change by Judy ==========
+                ragflow_logger.debug("Relocate column single: " + bx["text"])  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 # j column only has one value
                 left, right = 100000, 100000
                 if j > 0 and not f:
@@ -292,7 +292,7 @@ class TableStructureRecognizer(Recognizer):
                     continue
 
                 bx = tbl[i][jj][0]
-                ragflow_logger.debug("Relocate row single: " + bx["text"])  # ========== Change by Judy ==========
+                ragflow_logger.debug("Relocate row single: " + bx["text"])  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 # i row only has one value
                 up, down = 100000, 100000
                 if i > 0 and not f:
@@ -450,7 +450,7 @@ class TableStructureRecognizer(Recognizer):
                             + headers[j][k]
 
         ragflow_logger.debug(
-            f">>>>>>>>>>>>>>>>>{cap}：SIZE:{rowno}X{clmno} Header: {hdr_rowno}")  # ========== Change by Judy ==========
+            f">>>>>>>>>>>>>>>>>{cap}：SIZE:{rowno}X{clmno} Header: {hdr_rowno}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         row_txt = []
         for i in range(rowno):
             if i in hdr_rowno:

@@ -17,25 +17,25 @@
 from .docx_parser import RAGFlowDocxParser as DocxParser
 from .excel_parser import RAGFlowExcelParser as ExcelParser
 
-# from .html_parser import RAGFlowHtmlParser as HtmlParser                  # ========== Change by Judy ==========
-# from .json_parser import RAGFlowJsonParser as JsonParser                  # ========== Change by Judy ==========
-# from .markdown_parser import MarkdownElementExtractor                     # ========== Change by Judy ==========
-# from .markdown_parser import RAGFlowMarkdownParser as MarkdownParser      # ========== Change by Judy ==========
+# from .html_parser import RAGFlowHtmlParser as HtmlParser                  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+# from .json_parser import RAGFlowJsonParser as JsonParser                  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+# from .markdown_parser import MarkdownElementExtractor                     # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+# from .markdown_parser import RAGFlowMarkdownParser as MarkdownParser      # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 from .pdf_parser import PlainParser
 from .pdf_parser import RAGFlowPdfParser as PdfParser
 
-# from .ppt_parser import RAGFlowPptParser as PptParser                     # ========== Change by Judy ==========
-# from .txt_parser import RAGFlowTxtParser as TxtParser                     # ========== Change by Judy ==========
+# from .ppt_parser import RAGFlowPptParser as PptParser                     # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+# from .txt_parser import RAGFlowTxtParser as TxtParser                     # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 __all__ = [
     "PdfParser",
     "PlainParser",
     "DocxParser",
     "ExcelParser",
-    # "PptParser",                     # ========== Change by Judy ==========
-    # "HtmlParser",                    # ========== Change by Judy ==========
-    # "JsonParser",                    # ========== Change by Judy ==========
-    # "MarkdownParser",                # ========== Change by Judy ==========
-    # "TxtParser",                     # ========== Change by Judy ==========
-    # "MarkdownElementExtractor",      # ========== Change by Judy ==========
+    # "PptParser",                     # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "HtmlParser",                    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "JsonParser",                    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "MarkdownParser",                # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "TxtParser",                     # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "MarkdownElementExtractor",      # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 ]

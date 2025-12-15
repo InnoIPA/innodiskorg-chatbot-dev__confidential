@@ -24,8 +24,8 @@ import cv2
 import numpy as np
 import onnxruntime as ort
 from huggingface_hub import snapshot_download
-from ragflow.api.utils.file_utils import get_project_base_directory    # ========== Change by Judy ==========
-from ragflow.rag.settings import PARALLEL_DEVICES                      # ========== Change by Judy ==========
+from ragflow.api.utils.file_utils import get_project_base_directory    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+from ragflow.rag.settings import PARALLEL_DEVICES                      # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 from . import operators
 from .operators import *  # noqa: F403
@@ -79,7 +79,7 @@ def load_model(model_dir, nm, device_id: int | None = None):
     global loaded_models
     loaded_model = loaded_models.get(model_cached_tag)
     if loaded_model:
-        ragflow_logger.info(f"load_model {model_file_path} reuses cached model")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"load_model {model_file_path} reuses cached model")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return loaded_model
 
     if not os.path.exists(model_file_path):
@@ -117,14 +117,14 @@ def load_model(model_dir, nm, device_id: int | None = None):
             provider_options=[cuda_provider_options]
             )
         run_options.add_run_config_entry("memory.enable_memory_arena_shrinkage", "gpu:" + str(device_id))
-        ragflow_logger.info(f"load_model {model_file_path} uses GPU")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"load_model {model_file_path} uses GPU")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     else:
         sess = ort.InferenceSession(
             model_file_path,
             options=options,
             providers=['CPUExecutionProvider'])
         run_options.add_run_config_entry("memory.enable_memory_arena_shrinkage", "cpu")
-        ragflow_logger.info(f"load_model {model_file_path} uses CPU")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"load_model {model_file_path} uses CPU")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     loaded_model = (sess, run_options)
     loaded_models[model_cached_tag] = loaded_model
     return loaded_model

@@ -14,10 +14,11 @@
 #  limitations under the License.
 #
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import find_codec
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 def get_text(fnm: str, binary=None) -> str:

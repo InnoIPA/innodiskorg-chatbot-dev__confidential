@@ -26,7 +26,8 @@ import trio
 from langfuse import Langfuse
 from peewee import fn
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.agentic_reasoning import DeepResearcher
 from ragflow.api import settings
 from ragflow.api.db import LLMType, ParserType, StatusEnum
@@ -55,7 +56,7 @@ from ragflow.rag.prompts.prompts import ASK_SUMMARY, PROMPT_JINJA_ENV, gen_meta_
 from ragflow.rag.utils import num_tokens_from_string, rmSpace
 from ragflow.rag.utils.tavily_conn import Tavily
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -206,7 +207,7 @@ def chat_solo(dialog, messages, stream=True):
     else:
         answer = chat_mdl.chat(prompt_config.get("system", ""), msg, dialog.llm_setting)
         user_content = msg[-1].get("content", "[content not available]")
-        ragflow_logger.debug("User: {}|Assistant: {}".format(user_content, answer))  # ========== Change by Judy ==========
+        ragflow_logger.debug("User: {}|Assistant: {}".format(user_content, answer))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         yield {"answer": answer, "reference": {}, "audio_binary": tts(tts_mdl, answer), "prompt": "", "created_at": time.time()}
 
 
@@ -383,7 +384,7 @@ def chat(dialog, messages, stream=True, **kwargs):
     field_map = KnowledgebaseService.get_field_map(dialog.kb_ids)
     # try to use sql if field mapping is good to go
     if field_map:
-        ragflow_logger.debug("Use SQL to retrieval:{}".format(questions[-1]))  # ========== Change by Judy ==========
+        ragflow_logger.debug("Use SQL to retrieval:{}".format(questions[-1]))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         ans = use_sql(questions[-1], field_map, dialog.tenant_id, chat_mdl, prompt_config.get("quote", True), dialog.kb_ids)
         if ans:
             yield ans
@@ -481,7 +482,7 @@ def chat(dialog, messages, stream=True, **kwargs):
 
             knowledges = kb_prompt(kbinfos, max_tokens)
 
-    ragflow_logger.debug("{}->{}".format(" ".join(questions), "\n->".join(knowledges)))  # ========== Change by Judy ==========
+    ragflow_logger.debug("{}->{}".format(" ".join(questions), "\n->".join(knowledges)))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     retrieval_ts = timer()
     if not knowledges and prompt_config.get("empty_response"):
@@ -606,7 +607,7 @@ def chat(dialog, messages, stream=True, **kwargs):
     else:
         answer = chat_mdl.chat(prompt + prompt4citation, msg[1:], gen_conf)
         user_content = msg[-1].get("content", "[content not available]")
-        ragflow_logger.debug("User: {}|Assistant: {}".format(user_content, answer))  # ========== Change by Judy ==========
+        ragflow_logger.debug("User: {}|Assistant: {}".format(user_content, answer))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         res = decorate_answer(answer)
         res["audio_binary"] = tts(tts_mdl, answer)
         yield res
@@ -629,7 +630,7 @@ Please write the SQL, only SQL, without any other explanations or text.
         nonlocal sys_prompt, user_prompt, question, tried_times
         sql = chat_mdl.chat(sys_prompt, [{"role": "user", "content": user_prompt}], {"temperature": 0.06})
         sql = re.sub(r"^.*</think>", "", sql, flags=re.DOTALL)
-        ragflow_logger.debug(f"{question} ==> {user_prompt} get SQL: {sql}")  # ========== Change by Judy ==========
+        ragflow_logger.debug(f"{question} ==> {user_prompt} get SQL: {sql}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         sql = re.sub(r"[\r\n]+", " ", sql.lower())
         sql = re.sub(r".*select ", "select ", sql.lower())
         sql = re.sub(r" +", " ", sql)
@@ -656,7 +657,7 @@ Please write the SQL, only SQL, without any other explanations or text.
             else:
                 sql += f" AND {kb_filter}"
 
-        ragflow_logger.debug(f"{question} get SQL(refined): {sql}")  # ========== Change by Judy ==========
+        ragflow_logger.debug(f"{question} get SQL(refined): {sql}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         tried_times += 1
         return settings.retrievaler.sql_retrieval(sql, format="json"), sql
 
@@ -683,9 +684,9 @@ Please write the SQL, only SQL, without any other explanations or text.
         Please correct the error and write SQL again, only SQL, without any other explanations or text.
         """.format(index_name(tenant_id), "\n".join([f"{k}: {v}" for k, v in field_map.items()]), question, sql, tbl["error"])
         tbl, sql = get_table()
-        ragflow_logger.debug("TRY it again: {}".format(sql))  # ========== Change by Judy ==========
+        ragflow_logger.debug("TRY it again: {}".format(sql))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
-    ragflow_logger.debug("GET table: {}".format(tbl))  # ========== Change by Judy ==========
+    ragflow_logger.debug("GET table: {}".format(tbl))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     if tbl.get("error") or len(tbl["rows"]) == 0:
         return None
 
@@ -709,7 +710,7 @@ Please write the SQL, only SQL, without any other explanations or text.
     rows = re.sub(r"T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+Z)?\|", "|", rows)
 
     if not docid_idx or not doc_name_idx:
-        ragflow_logger.warning("SQL missing field: " + sql)  # ========== Change by Judy ==========
+        ragflow_logger.warning("SQL missing field: " + sql)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return {"answer": "\n".join([columns, line, rows]), "reference": {"chunks": [], "doc_aggs": []}, "prompt": sys_prompt}
 
     docid_idx = list(docid_idx)[0]

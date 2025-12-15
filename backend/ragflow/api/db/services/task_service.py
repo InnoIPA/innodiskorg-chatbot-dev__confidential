@@ -21,7 +21,8 @@ from datetime import datetime
 import xxhash
 from peewee import JOIN
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.db import FileType, StatusEnum, TaskStatus
 from ragflow.api.db.db_models import (
@@ -44,7 +45,7 @@ from ragflow.rag.settings import get_svr_queue_name
 from ragflow.rag.utils.redis_conn import REDIS_CONN
 from ragflow.rag.utils.storage_factory import STORAGE_IMPL
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -293,7 +294,7 @@ class TaskService(CommonService):
         """
         task = cls.model.get_by_id(id)
         if not task:
-            ragflow_logger.warning("Update_progress error: task not found")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Update_progress error: task not found")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return
 
         if os.environ.get("MACOS"):
@@ -477,7 +478,7 @@ def cancel_all_task_of(doc_id):
         try:
             REDIS_CONN.set(f"{t.id}-cancel", "x")
         except Exception as e:
-            ragflow_logger.exception(e)  # ========== Change by Judy ==========
+            ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def has_canceled(task_id):
@@ -485,7 +486,7 @@ def has_canceled(task_id):
         if REDIS_CONN.get(f"{task_id}-cancel"):
             return True
     except Exception as e:
-        ragflow_logger.exception(e)  # ========== Change by Judy ==========
+        ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     return False
 
 

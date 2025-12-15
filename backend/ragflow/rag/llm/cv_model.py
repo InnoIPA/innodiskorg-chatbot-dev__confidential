@@ -25,13 +25,15 @@ import requests
 from openai import OpenAI
 from openai.lib.azure import AzureOpenAI
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.nlp import is_english
 from ragflow.rag.prompts import vision_llm_describe_prompt
 from ragflow.rag.utils import num_tokens_from_string
 
 # from zhipuai import ZhipuAI    # Lazy import for avoiding initialized import
-# ========== Change by Judy ==========
+
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class Base(ABC):
@@ -235,10 +237,11 @@ class Zhipu4V(GptV4):
     _FACTORY_NAME = "ZHIPU-AI"
 
     def __init__(self, key, model_name="glm-4v", lang="Chinese", **kwargs):
-        # ========== Change by Judy ==========
+        # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
         from zhipuai import ZhipuAI  # Lazy import for avoiding initialized import
 
-        # ========== Change by Judy ==========
+        # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
         self.client = ZhipuAI(api_key=key)
         self.model_name = model_name

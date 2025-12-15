@@ -4,11 +4,12 @@ from urllib.parse import quote_plus
 import opendal
 import pymysql
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils import get_base_config
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -50,10 +51,10 @@ def get_opendal_config():
             scheme = opendal_config.get("scheme")
             config_data = opendal_config.get("config", {})
             kwargs = {"scheme": scheme, **config_data}
-        ragflow_logger.info("Loaded OpenDAL configuration from yaml: %s", kwargs)  # ========== Change by Judy ==========
+        ragflow_logger.info("Loaded OpenDAL configuration from yaml: %s", kwargs)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return kwargs
     except Exception as e:
-        ragflow_logger.error("Failed to load OpenDAL configuration from yaml: %s", str(e))  # ========== Change by Judy ==========
+        ragflow_logger.error("Failed to load OpenDAL configuration from yaml: %s", str(e))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         raise
 
 
@@ -67,7 +68,7 @@ class OpenDALStorage:
             self.init_opendal_mysql_table()
         self._operator = opendal.Operator(**self._kwargs)
 
-        ragflow_logger.info("OpenDALStorage initialized successfully")  # ========== Change by Judy ==========
+        ragflow_logger.info("OpenDALStorage initialized successfully")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def health(self):
         bucket, fnm, binary = "txtxtxtxt1", "txtxtxtxt1", b"_t@@@1"
@@ -106,9 +107,9 @@ class OpenDALStorage:
             conn.commit()
             cursor.close()
             conn.close()
-            ragflow_logger.info(f"Database configuration initialized with max_allowed_packet={max_packet}")  # ========== Change by Judy ==========
+            ragflow_logger.info(f"Database configuration initialized with max_allowed_packet={max_packet}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         except Exception as e:
-            ragflow_logger.error(f"Failed to initialize database configuration: {str(e)}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Failed to initialize database configuration: {str(e)}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise
 
     def init_opendal_mysql_table(self):
@@ -124,4 +125,4 @@ class OpenDALStorage:
         conn.commit()
         cursor.close()
         conn.close()
-        ragflow_logger.info(f"Table `{self._kwargs['table']}` initialized.")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"Table `{self._kwargs['table']}` initialized.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<

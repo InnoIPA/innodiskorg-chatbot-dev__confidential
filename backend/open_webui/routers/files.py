@@ -118,7 +118,7 @@ def upload_file(
         )
         if process:
             try:
-                # ========== Change by Judy ==========
+                # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
                 if file.content_type in [
                     "audio/mpeg",
@@ -160,7 +160,7 @@ def upload_file(
                 from ragflow.run_pdf import print_message
                 print_message("/files/", [vars(file_item)])
 
-                # ========== Change by Judy ==========
+                # <<<<<<<<<<<<<<<<<<<< Changed by Judy
             except Exception as e:
                 log.exception(e)
                 log.error(f"Error processing file: {file_item.id}")

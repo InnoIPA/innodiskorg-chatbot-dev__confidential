@@ -24,7 +24,7 @@ import chardet
 import roman_numbers as r
 from cn2an import cn2an
 from PIL import Image
-from ragflow.rag.utils import num_tokens_from_string    # ========== Change by Judy ==========
+from ragflow.rag.utils import num_tokens_from_string    # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 from word2number import w2n
 
 from . import rag_tokenizer
@@ -276,7 +276,7 @@ def tokenize_chunks(chunks, doc, eng, pdf_parser=None):
     for ii, ck in enumerate(chunks):
         if len(ck.strip()) == 0:
             continue
-        ragflow_logger.debug("-- {}".format(ck))  # ========== Change by Judy ==========
+        ragflow_logger.debug("-- {}".format(ck))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         d = copy.deepcopy(doc)
         if pdf_parser:
             try:
@@ -297,7 +297,7 @@ def tokenize_chunks_with_images(chunks, doc, eng, images):
     for ii, (ck, image) in enumerate(zip(chunks, images)):
         if len(ck.strip()) == 0:
             continue
-        ragflow_logger.debug("-- {}".format(ck))  # ========== Change by Judy ==========
+        ragflow_logger.debug("-- {}".format(ck))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         d = copy.deepcopy(doc)
         d["image"] = image
         add_positions(d, [[ii]*5])
@@ -504,7 +504,7 @@ def hierarchical_merge(bull, sections, depth):
 
     for i in range(len(cks)):
         cks[i] = [sections[j] for j in cks[i][::-1]]
-        ragflow_logger.debug("\n* ".join(cks[i]))  # ========== Change by Judy ==========
+        ragflow_logger.debug("\n* ".join(cks[i]))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     res = [[]]
     num = [0]

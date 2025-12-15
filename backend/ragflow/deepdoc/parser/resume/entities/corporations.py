@@ -20,7 +20,7 @@ import os
 import re
 
 import pandas as pd
-from ragflow.rag.nlp import rag_tokenizer  # ========== Change by Judy ==========
+from ragflow.rag.nlp import rag_tokenizer  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 from . import regions
 
@@ -101,7 +101,7 @@ GOOD_CORP = set([corpNorm(rmNoise(c), False) for c in GOOD_CORP])
 for c, v in CORP_TAG.items():
     cc = corpNorm(rmNoise(c), False)
     if not cc:
-        ragflow_logger.debug(c)  # ========== Change by Judy ==========
+        ragflow_logger.debug(c)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 CORP_TAG = {corpNorm(rmNoise(c), False): v for c, v in CORP_TAG.items()}
 
 

@@ -32,7 +32,8 @@ import requests
 from openai import OpenAI
 from openai.lib.azure import AzureOpenAI
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag.llm import (
     FACTORY_DEFAULT_BASE_URL,
     LITELLM_PROVIDER_PREFIX,
@@ -41,13 +42,15 @@ from ragflow.rag.llm import (
 from ragflow.rag.nlp import is_chinese, is_english
 from ragflow.rag.utils import num_tokens_from_string
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from strenum import StrEnum
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 # from zhipuai import ZhipuAI    # Lazy import for avoiding initialized import
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -157,7 +160,7 @@ class Base(ABC):
         return gen_conf
 
     def _chat(self, history, gen_conf, **kwargs):
-        ragflow_logger.info("[HISTORY]" + json.dumps(history, ensure_ascii=False, indent=2))  # ========== Change by Judy ==========
+        ragflow_logger.info("[HISTORY]" + json.dumps(history, ensure_ascii=False, indent=2))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if self.model_name.lower().find("qwen3") >= 0:
             kwargs["extra_body"] = {"enable_thinking": False}
         response = self.client.chat.completions.create(model=self.model_name, messages=history, **gen_conf, **kwargs)
@@ -170,7 +173,7 @@ class Base(ABC):
         return ans, self.total_token_count(response)
 
     def _chat_streamly(self, history, gen_conf, **kwargs):
-        ragflow_logger.info("[HISTORY STREAMLY]" + json.dumps(history, ensure_ascii=False, indent=4))  # ========== Change by Judy ==========
+        ragflow_logger.info("[HISTORY STREAMLY]" + json.dumps(history, ensure_ascii=False, indent=4))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         reasoning_start = False
         if kwargs.get("stop") or "stop" in gen_conf:
             response = self.client.chat.completions.create(model=self.model_name, messages=history, stream=True, **gen_conf, stop=kwargs.get("stop"))
@@ -208,7 +211,7 @@ class Base(ABC):
         return ans + LENGTH_NOTIFICATION_EN
 
     def _exceptions(self, e, attempt):
-        ragflow_logger.exception("OpenAI chat_with_tools")  # ========== Change by Judy ==========
+        ragflow_logger.exception("OpenAI chat_with_tools")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         # Classify the error
         error_code = self._classify_error(e)
         if attempt == self.max_retries:
@@ -220,7 +223,7 @@ class Base(ABC):
             return f"{ERROR_PREFIX}: {error_code} - {str(e)}"
 
         delay = self._get_delay()
-        ragflow_logger.warning(f"Error: {error_code}. Retrying in {delay:.2f} seconds... (Attempt {attempt + 1}/{self.max_retries})")  # ========== Change by Judy ==========
+        ragflow_logger.warning(f"Error: {error_code}. Retrying in {delay:.2f} seconds... (Attempt {attempt + 1}/{self.max_retries})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         time.sleep(delay)
 
     def _verbose_tool_use(self, name, args, res):
@@ -270,7 +273,7 @@ class Base(ABC):
             history = hist
             try:
                 for _ in range(self.max_rounds + 1):
-                    ragflow_logger.info(f"{self.tools=}")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"{self.tools=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     response = self.client.chat.completions.create(model=self.model_name, messages=history, tools=self.tools, tool_choice="auto", **gen_conf)
                     tk_count += self.total_token_count(response)
                     if any([not response.choices, not response.choices[0].message]):
@@ -287,7 +290,7 @@ class Base(ABC):
                         return ans, tk_count
 
                     for tool_call in response.choices[0].message.tool_calls:
-                        ragflow_logger.info(f"Response {tool_call=}")  # ========== Change by Judy ==========
+                        ragflow_logger.info(f"Response {tool_call=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         name = tool_call.function.name
                         try:
                             args = json_repair.loads(tool_call.function.arguments)
@@ -295,11 +298,11 @@ class Base(ABC):
                             history = self._append_history(history, tool_call, tool_response)
                             ans += self._verbose_tool_use(name, args, tool_response)
                         except Exception as e:
-                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # ========== Change by Judy ==========
+                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             history.append({"role": "tool", "tool_call_id": tool_call.id, "content": f"Tool call error: \n{tool_call}\nException:\n" + str(e)})
                             ans += self._verbose_tool_use(name, {}, str(e))
 
-                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # ========== Change by Judy ==========
+                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 history.append({"role": "user", "content": f"Exceed max rounds: {self.max_rounds}"})
                 response, token_count = self._chat(history, gen_conf)
                 ans += response
@@ -355,7 +358,7 @@ class Base(ABC):
             try:
                 for _ in range(self.max_rounds + 1):
                     reasoning_start = False
-                    ragflow_logger.info(f"{tools=}")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"{tools=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                     response = self.client.chat.completions.create(model=self.model_name, messages=history, stream=True, tools=tools, tool_choice="auto", **gen_conf)
                     final_tool_calls = {}
                     answer = ""
@@ -413,11 +416,11 @@ class Base(ABC):
                             history = self._append_history(history, tool_call, tool_response)
                             yield self._verbose_tool_use(name, args, tool_response)
                         except Exception as e:
-                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # ========== Change by Judy ==========
+                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             history.append({"role": "tool", "tool_call_id": tool_call.id, "content": f"Tool call error: \n{tool_call}\nException:\n" + str(e)})
                             yield self._verbose_tool_use(name, {}, str(e))
 
-                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # ========== Change by Judy ==========
+                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 history.append({"role": "user", "content": f"Exceed max rounds: {self.max_rounds}"})
                 response = self.client.chat.completions.create(model=self.model_name, messages=history, stream=True, **gen_conf)
                 for resp in response:
@@ -640,11 +643,12 @@ class ZhipuChat(Base):
     def __init__(self, key, model_name="glm-3-turbo", base_url=None, **kwargs):
         super().__init__(key, model_name, base_url=base_url, **kwargs)
 
-        # ========== Change by Judy ==========
+        # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
         # Lazy import for avoiding initialized import
         from zhipuai import ZhipuAI
 
-        # ========== Change by Judy ==========
+        # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
         self.client = ZhipuAI(api_key=key)
         self.model_name = model_name
@@ -678,7 +682,7 @@ class ZhipuChat(Base):
         ans = ""
         tk_count = 0
         try:
-            ragflow_logger.info(json.dumps(history, ensure_ascii=False, indent=2))  # ========== Change by Judy ==========
+            ragflow_logger.info(json.dumps(history, ensure_ascii=False, indent=2))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             response = self.client.chat.completions.create(model=self.model_name, messages=history, stream=True, **gen_conf)
             for resp in response:
                 if not resp.choices[0].delta.content:
@@ -729,14 +733,14 @@ class LocalLLM(Base):
         self.client = Client(port=12345, protocol="grpc", asyncio=True)
 
     def _prepare_prompt(self, system, history, gen_conf):
-        from ragflow.rag.svr.jina_server import Prompt
+        from ragflow.rag.svr.jina_server import Prompt  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if system and history and history[0].get("role") != "system":
             history.insert(0, {"role": "system", "content": system})
         return Prompt(message=history, gen_conf=gen_conf)
 
     def _stream_response(self, endpoint, prompt):
-        from ragflow.rag.svr.jina_server import Generation
+        from ragflow.rag.svr.jina_server import Generation  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         answer = ""
         try:
@@ -1444,7 +1448,7 @@ class LiteLLMBase(ABC):
         return gen_conf
 
     def _chat(self, history, gen_conf, **kwargs):
-        ragflow_logger.info("[HISTORY]" + json.dumps(history, ensure_ascii=False, indent=2))  # ========== Change by Judy ==========
+        ragflow_logger.info("[HISTORY]" + json.dumps(history, ensure_ascii=False, indent=2))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if self.model_name.lower().find("qwen3") >= 0:
             kwargs["extra_body"] = {"enable_thinking": False}
 
@@ -1465,7 +1469,7 @@ class LiteLLMBase(ABC):
         return ans, self.total_token_count(response)
 
     def _chat_streamly(self, history, gen_conf, **kwargs):
-        ragflow_logger.info("[HISTORY STREAMLY]" + json.dumps(history, ensure_ascii=False, indent=4))  # ========== Change by Judy ==========
+        ragflow_logger.info("[HISTORY STREAMLY]" + json.dumps(history, ensure_ascii=False, indent=4))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         reasoning_start = False
 
         completion_args = self._construct_completion_args(history=history, stream=True, tools=False, **gen_conf)
@@ -1515,7 +1519,7 @@ class LiteLLMBase(ABC):
         return ans + LENGTH_NOTIFICATION_EN
 
     def _exceptions(self, e, attempt):
-        ragflow_logger.exception("OpenAI chat_with_tools")  # ========== Change by Judy ==========
+        ragflow_logger.exception("OpenAI chat_with_tools")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         # Classify the error
         error_code = self._classify_error(e)
         if attempt == self.max_retries:
@@ -1527,7 +1531,7 @@ class LiteLLMBase(ABC):
             return f"{ERROR_PREFIX}: {error_code} - {str(e)}"
 
         delay = self._get_delay()
-        ragflow_logger.warning(f"Error: {error_code}. Retrying in {delay:.2f} seconds... (Attempt {attempt + 1}/{self.max_retries})")  # ========== Change by Judy ==========
+        ragflow_logger.warning(f"Error: {error_code}. Retrying in {delay:.2f} seconds... (Attempt {attempt + 1}/{self.max_retries})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         time.sleep(delay)
 
     def _verbose_tool_use(self, name, args, res):
@@ -1613,7 +1617,7 @@ class LiteLLMBase(ABC):
             history = deepcopy(hist)  # deepcopy is required here
             try:
                 for _ in range(self.max_rounds + 1):
-                    ragflow_logger.info(f"{self.tools=}")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"{self.tools=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
                     completion_args = self._construct_completion_args(history=history, stream=False, tools=True, **gen_conf)
                     response = litellm.completion(
@@ -1638,7 +1642,7 @@ class LiteLLMBase(ABC):
                         return ans, tk_count
 
                     for tool_call in message.tool_calls:
-                        ragflow_logger.info(f"Response {tool_call=}")  # ========== Change by Judy ==========
+                        ragflow_logger.info(f"Response {tool_call=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         name = tool_call.function.name
                         try:
                             args = json_repair.loads(tool_call.function.arguments)
@@ -1646,11 +1650,11 @@ class LiteLLMBase(ABC):
                             history = self._append_history(history, tool_call, tool_response)
                             ans += self._verbose_tool_use(name, args, tool_response)
                         except Exception as e:
-                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # ========== Change by Judy ==========
+                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             history.append({"role": "tool", "tool_call_id": tool_call.id, "content": f"Tool call error: \n{tool_call}\nException:\n" + str(e)})
                             ans += self._verbose_tool_use(name, {}, str(e))
 
-                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # ========== Change by Judy ==========
+                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 history.append({"role": "user", "content": f"Exceed max rounds: {self.max_rounds}"})
 
                 response, token_count = self._chat(history, gen_conf)
@@ -1710,7 +1714,7 @@ class LiteLLMBase(ABC):
             try:
                 for _ in range(self.max_rounds + 1):
                     reasoning_start = False
-                    ragflow_logger.info(f"{tools=}")  # ========== Change by Judy ==========
+                    ragflow_logger.info(f"{tools=}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
                     completion_args = self._construct_completion_args(history=history, stream=True, tools=True, **gen_conf)
                     response = litellm.completion(
@@ -1777,7 +1781,7 @@ class LiteLLMBase(ABC):
                             history = self._append_history(history, tool_call, tool_response)
                             yield self._verbose_tool_use(name, args, tool_response)
                         except Exception as e:
-                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # ========== Change by Judy ==========
+                            ragflow_logger.exception(msg=f"Wrong JSON argument format in LLM tool call response: {tool_call}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             history.append(
                                 {
                                     "role": "tool",
@@ -1787,7 +1791,7 @@ class LiteLLMBase(ABC):
                             )
                             yield self._verbose_tool_use(name, {}, str(e))
 
-                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # ========== Change by Judy ==========
+                ragflow_logger.warning(f"Exceed max rounds: {self.max_rounds}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 history.append({"role": "user", "content": f"Exceed max rounds: {self.max_rounds}"})
 
                 completion_args = self._construct_completion_args(history=history, stream=True, tools=True, **gen_conf)

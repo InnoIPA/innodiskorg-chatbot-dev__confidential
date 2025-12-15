@@ -32,7 +32,7 @@ import requests
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 from filelock import FileLock
-from ragflow.api.constants import SERVICE_CONF  # ========== Change by Judy ==========
+from ragflow.api.constants import SERVICE_CONF  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 from . import file_utils
 
@@ -101,7 +101,7 @@ def show_configs():
                   if "http_secret_key" in val:
                       val["http_secret_key"] = "*" * 8
         msg += f"\n\t{k}: {v}"
-    ragflow_logger.info(msg)  # ========== Change by Judy ==========
+    ragflow_logger.info(msg)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def get_base_config(key, default=None):

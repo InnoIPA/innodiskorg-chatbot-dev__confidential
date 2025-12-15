@@ -26,11 +26,13 @@ from contextlib import contextmanager
 import demjson3
 import numpy as np
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.deepdoc.parser.resume.entities import corporations, degrees, schools
 from ragflow.rag.nlp import rag_tokenizer, surname
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from xpinyin import Pinyin
 
 # ========== Add by Judy ==========
@@ -206,7 +208,7 @@ def forEdu(cv):
             y, m, d = getYMD(edu_end_dt)
             cv["work_exp_flt"] = min(int(str(datetime.date.today())[0:4]) - int(y), cv.get("work_exp_flt", 1000))
         except Exception as e:
-            ragflow_logger.exception("forEdu {} {} {}".format(e, edu_end_dt, cv.get("work_exp_flt")))  # ========== Change by Judy ==========
+            ragflow_logger.exception("forEdu {} {} {}".format(e, edu_end_dt, cv.get("work_exp_flt")))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     if sch:
         cv["school_name_kwd"] = sch
         if (len(cv.get("degree_kwd", [])) >= 1 and "本科" in cv["degree_kwd"]) \
@@ -335,7 +337,7 @@ def forWork(cv):
         try:
             duas.append((datetime.datetime.strptime(ed, "%Y-%m-%d") - datetime.datetime.strptime(st, "%Y-%m-%d")).days)
         except Exception:
-            ragflow_logger.exception("forWork {} {}".format(n.get("start_time"), n.get("end_time")))  # ========== Change by Judy ==========
+            ragflow_logger.exception("forWork {} {}".format(n.get("start_time"), n.get("end_time")))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if n.get("scale"):
             r = re.search(r"^([0-9]+)", str(n["scale"]))
@@ -403,7 +405,7 @@ def forWork(cv):
             y, m, d = getYMD(work_st_tm)
             cv["work_exp_flt"] = min(int(str(datetime.date.today())[0:4]) - int(y), cv.get("work_exp_flt", 1000))
         except Exception as e:
-            ragflow_logger.exception("forWork {} {} {}".format(e, work_st_tm, cv.get("work_exp_flt")))  # ========== Change by Judy ==========
+            ragflow_logger.exception("forWork {} {} {}".format(e, work_st_tm, cv.get("work_exp_flt")))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     cv["job_num_int"] = 0
     if duas:
@@ -554,7 +556,7 @@ def parse(cv):
                     cv[f"{t}_kwd"] = nms
                     cv[f"{t}_tks"] = rag_tokenizer.tokenize(" ".join(nms))
             except Exception:
-                ragflow_logger.exception("parse {} {}".format(str(traceback.format_exc()), cv[k]))  # ========== Change by Judy ==========
+                ragflow_logger.exception("parse {} {}".format(str(traceback.format_exc()), cv[k]))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 cv[k] = []
 
         # tokenize fields
@@ -670,7 +672,7 @@ def parse(cv):
                 cv["work_start_dt"] = "%s-%02d-%02d 00:00:00" % (y, int(m), int(d))
                 cv["work_exp_flt"] = int(str(datetime.date.today())[0:4]) - int(y)
     except Exception as e:
-        ragflow_logger.exception("parse {} ==> {}".format(e, cv.get("work_start_time")))  # ========== Change by Judy ==========
+        ragflow_logger.exception("parse {} ==> {}".format(e, cv.get("work_start_time")))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     if "work_exp_flt" not in cv and cv.get("work_experience", 0):
         cv["work_exp_flt"] = int(cv["work_experience"]) / 12.
 
@@ -689,7 +691,7 @@ def parse(cv):
 
     cv["tob_resume_id"] = str(cv["tob_resume_id"])
     cv["id"] = cv["tob_resume_id"]
-    ragflow_logger.debug("CCCCCCCCCCCCCCC")  # ========== Change by Judy ==========
+    ragflow_logger.debug("CCCCCCCCCCCCCCC")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     return dealWithInt64(cv)
 

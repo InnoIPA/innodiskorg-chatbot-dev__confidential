@@ -32,7 +32,8 @@ from huggingface_hub import snapshot_download
 from PIL import Image
 from pypdf import PdfReader as pdf2_read
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.deepdoc.vision import (
@@ -46,7 +47,7 @@ from ragflow.rag.nlp import rag_tokenizer
 from ragflow.rag.prompts import vision_llm_describe_prompt
 from ragflow.rag.settings import PARALLEL_DEVICES
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -91,7 +92,7 @@ class RAGFlowPdfParser:
                 if torch.cuda.is_available():
                     self.updown_cnt_mdl.set_param({"device": "cuda"})
             except Exception:
-                ragflow_logger.exception("RAGFlowPdfParser __init__")  # ========== Change by Judy ==========
+                ragflow_logger.exception("RAGFlowPdfParser __init__")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         try:
             model_dir = os.path.join(
                 get_project_base_directory(),
@@ -218,7 +219,7 @@ class RAGFlowPdfParser:
         return True
 
     def _table_transformer_job(self, ZM):
-        ragflow_logger.debug("Table processing...")  # ========== Change by Judy ==========
+        ragflow_logger.debug("Table processing...")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         imgs, pos = [], []
         tbcnt = [0]
         MARGIN = 10
@@ -311,7 +312,7 @@ class RAGFlowPdfParser:
     def __ocr(self, pagenum, img, chars, ZM=3, device_id: int | None = None):
         start = timer()
         bxs = self.ocr.detect(np.array(img), device_id)
-        ragflow_logger.info(f"__ocr detecting boxes of a image cost ({timer() - start}s)")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"__ocr detecting boxes of a image cost ({timer() - start}s)")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         start = timer()
         if not bxs:
@@ -353,7 +354,7 @@ class RAGFlowPdfParser:
                     b["text"] += c["text"]
             del b["chars"]
 
-        ragflow_logger.info(f"__ocr sorting {len(chars)} chars cost {timer() - start}s")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"__ocr sorting {len(chars)} chars cost {timer() - start}s")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         start = timer()
         boxes_to_reg = []
         img_np = np.array(img)
@@ -368,7 +369,7 @@ class RAGFlowPdfParser:
         for i in range(len(boxes_to_reg)):
             boxes_to_reg[i]["text"] = texts[i]
             del boxes_to_reg[i]["box_image"]
-        ragflow_logger.info(f"__ocr recognize {len(bxs)} boxes cost {timer() - start}s")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"__ocr recognize {len(bxs)} boxes cost {timer() - start}s")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         bxs = [b for b in bxs if b["text"]]
         if self.mean_height[pagenum-1] == 0:
             self.mean_height[pagenum-1] = np.median([b["bottom"] - b["top"]
@@ -451,7 +452,7 @@ class RAGFlowPdfParser:
         self.column_num = int(self.page_images[0].size[0] / zoomin / column_width)
         if column_width < self.page_images[0].size[0] / zoomin / self.column_num:
             ragflow_logger.info("Multi-column................... {} {}".format(column_width,
-                  self.page_images[0].size[0] / zoomin / self.column_num))  # ========== Change by Judy ==========
+                  self.page_images[0].size[0] / zoomin / self.column_num))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.boxes = self.sort_X_by_page(self.boxes, column_width / self.column_num)
 
         i = 0
@@ -490,7 +491,7 @@ class RAGFlowPdfParser:
                     b_["text"],
                     any(feats),
                     any(concatting_feats),
-                ))  # ========== Change by Judy ==========
+                ))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 i += 1
                 continue
             # merge up and down
@@ -792,14 +793,14 @@ class RAGFlowPdfParser:
                     "TABLE:" +
                     self.boxes[i]["text"] +
                     "; Cap: " +
-                    tk)  # ========== Change by Judy ==========
+                    tk)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             elif fk:
                 figures[fk].insert(0, c)
                 ragflow_logger.debug(
                     "FIGURE:" +
                     self.boxes[i]["text"] +
                     "; Cap: " +
-                    tk)  # ========== Change by Judy ==========
+                    tk)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             self.boxes.pop(i)
 
         def cropout(bxs, ltype, poss):
@@ -822,7 +823,7 @@ class RAGFlowPdfParser:
                     ragflow_logger.warning(
                         f"Missing layout match: {pn + 1},%s" %
                         (bxs[0].get(
-                            "layoutno", "")))  # ========== Change by Judy ==========
+                            "layoutno", "")))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
                 left, top, right, bott = b["x0"], b["top"], b["x1"], b["bottom"]
                 if right < left:
@@ -1000,7 +1001,7 @@ class RAGFlowPdfParser:
                 if usefull(boxes[0]):
                     dfs(boxes[0], 0)
                 else:
-                    ragflow_logger.debug("WASTE: " + boxes[0]["text"])  # ========== Change by Judy ==========
+                    ragflow_logger.debug("WASTE: " + boxes[0]["text"])  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             except Exception:
                 pass
             boxes.pop(0)
@@ -1010,7 +1011,7 @@ class RAGFlowPdfParser:
                     "\n".join([c["text"] + self._line_tag(c, ZM) for c in lines]))
             else:
                 ragflow_logger.debug("REMOVED: " +
-                              "<<".join([c["text"] for c in lines]))  # ========== Change by Judy ==========
+                              "<<".join([c["text"] for c in lines]))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         return "\n\n".join(res)
 
@@ -1024,7 +1025,7 @@ class RAGFlowPdfParser:
             pdf.close()
             return total_page
         except Exception:
-            ragflow_logger.exception("total_page_number")  # ========== Change by Judy ==========
+            ragflow_logger.exception("total_page_number")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __images__(self, fnm, zoomin=3, page_from=0,
                    page_to=299, callback=None):
@@ -1047,14 +1048,14 @@ class RAGFlowPdfParser:
                     try:
                         self.page_chars = [[c for c in page.dedupe_chars().chars if self._has_color(c)] for page in self.pdf.pages[page_from:page_to]]
                     except Exception as e:
-                        ragflow_logger.warning(f"Failed to extract characters for pages {page_from}-{page_to}: {str(e)}")  # ========== Change by Judy ==========
+                        ragflow_logger.warning(f"Failed to extract characters for pages {page_from}-{page_to}: {str(e)}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                         self.page_chars = [[] for _ in range(page_to - page_from)]  # If failed to extract, using empty list instead.
 
                     self.total_page = len(self.pdf.pages)
 
         except Exception:
-            ragflow_logger.exception("RAGFlowPdfParser __images__")  # ========== Change by Judy ==========
-        ragflow_logger.info(f"__images__ dedupe_chars cost {timer() - start}s")  # ========== Change by Judy ==========
+            ragflow_logger.exception("RAGFlowPdfParser __images__")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+        ragflow_logger.info(f"__images__ dedupe_chars cost {timer() - start}s")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         self.outlines = []
         try:
@@ -1073,12 +1074,12 @@ class RAGFlowPdfParser:
                 dfs(outlines, 0)
 
         except Exception as e:
-            ragflow_logger.warning(f"Outlines exception: {e}")  # ========== Change by Judy ==========
+            ragflow_logger.warning(f"Outlines exception: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if not self.outlines:
-            ragflow_logger.warning("Miss outlines")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Miss outlines")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
-        ragflow_logger.debug("Images converted.")  # ========== Change by Judy ==========
+        ragflow_logger.debug("Images converted.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         self.is_english = [re.search(r"[a-zA-Z0-9,/¸;:'\[\]\(\)!@#$%^&*\"?<>._-]{30,}", "".join(
             random.choices([c["text"] for c in self.page_chars[i]], k=min(100, len(self.page_chars[i]))))) for i in
             range(len(self.page_chars))]
@@ -1136,7 +1137,7 @@ class RAGFlowPdfParser:
 
         trio.run(__img_ocr_launcher)
 
-        ragflow_logger.info(f"__images__ {len(self.page_images)} pages cost {timer() - start}s")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"__images__ {len(self.page_images)} pages cost {timer() - start}s")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if not self.is_english and not any(
                 [c for c in self.page_chars]) and self.boxes:
@@ -1144,7 +1145,7 @@ class RAGFlowPdfParser:
             self.is_english = re.search(r"[\na-zA-Z0-9,/¸;:'\[\]\(\)!@#$%^&*\"?<>._-]{30,}",
                                         "".join([b["text"] for b in random.choices(bxes, k=min(30, len(bxes)))]))
 
-        ragflow_logger.debug("Is it English:", self.is_english)  # ========== Change by Judy ==========
+        ragflow_logger.debug("Is it English:", self.is_english)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         self.page_cum_height = np.cumsum(self.page_cum_height)
         assert len(self.page_cum_height) == len(self.page_images) + 1
@@ -1359,9 +1360,9 @@ class PlainParser:
 
             dfs(outlines, 0)
         except Exception:
-            ragflow_logger.exception("Outlines exception")  # ========== Change by Judy ==========
+            ragflow_logger.exception("Outlines exception")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if not self.outlines:
-            ragflow_logger.warning("Miss outlines")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Miss outlines")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         return [(line, "") for line in lines], []
 
@@ -1389,7 +1390,7 @@ class VisionParser(RAGFlowPdfParser):
         except Exception:
             self.page_images = None
             self.total_page = 0
-            ragflow_logger.exception("VisionParser __images__")  # ========== Change by Judy ==========
+            ragflow_logger.exception("VisionParser __images__")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __call__(self, filename, from_page=0, to_page=100000, **kwargs):
         callback = kwargs.get("callback", lambda prog, msg: None)

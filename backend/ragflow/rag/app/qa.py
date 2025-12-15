@@ -26,7 +26,8 @@ from markdown import markdown
 from openpyxl import load_workbook
 from PIL import Image
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.deepdoc.parser import DocxParser, ExcelParser, PdfParser
 from ragflow.deepdoc.parser.utils import get_text
 from ragflow.rag.nlp import (
@@ -42,7 +43,7 @@ from ragflow.rag.nlp import (
 )
 from ragflow.rag.utils import get_float
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -107,7 +108,7 @@ class Pdf(PdfParser):
             callback
         )
         callback(msg="OCR finished ({:.2f}s)".format(timer() - start))
-        ragflow_logger.debug("OCR({}~{}): {:.2f}s".format(from_page, to_page, timer() - start))  # ========== Change by Judy ==========
+        ragflow_logger.debug("OCR({}~{}): {:.2f}s".format(from_page, to_page, timer() - start))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         start = timer()
         self._layouts_rec(zoomin, drop=False)
         callback(0.63, "Layout analysis ({:.2f}s)".format(timer() - start))
@@ -123,7 +124,7 @@ class Pdf(PdfParser):
         #self._naive_vertical_merge()
         # self._concat_downward()
         #self._filter_forpages()
-        ragflow_logger.debug("layouts: {}".format(timer() - start))  # ========== Change by Judy ==========
+        ragflow_logger.debug("layouts: {}".format(timer() - start))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         sections = [b["text"] for b in self.boxes]
         bull_x0_list = []
         q_bull, reg = qbullets_category(sections)

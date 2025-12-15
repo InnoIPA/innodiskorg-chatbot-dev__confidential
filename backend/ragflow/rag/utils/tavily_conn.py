@@ -15,11 +15,13 @@
 #
 import logging
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils import get_uuid
 from ragflow.rag.nlp import rag_tokenizer
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from tavily import TavilyClient
 
 # ========== Add by Judy ==========
@@ -42,14 +44,14 @@ class Tavily:
             )
             return [{"url": res["url"], "title": res["title"], "content": res["content"], "score": res["score"]} for res in response["results"]]
         except Exception as e:
-            ragflow_logger.exception(e)  # ========== Change by Judy ==========
+            ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         return []
 
     def retrieve_chunks(self, question):
         chunks = []
         aggs = []
-        ragflow_logger.info("[Tavily]Q: " + question)  # ========== Change by Judy ==========
+        ragflow_logger.info("[Tavily]Q: " + question)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         for r in self.search(question):
             id = get_uuid()
             chunks.append({
@@ -74,5 +76,5 @@ class Tavily:
                 "count": 1,
                 "url": r["url"]
             })
-            ragflow_logger.info("[Tavily]R: "+r["content"][:128]+"...")  # ========== Change by Judy ==========
+            ragflow_logger.info("[Tavily]R: "+r["content"][:128]+"...")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return {"chunks": chunks, "doc_aggs": aggs}

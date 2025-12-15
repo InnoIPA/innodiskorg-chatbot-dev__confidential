@@ -18,12 +18,13 @@ import json
 import re
 from copy import deepcopy
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.deepdoc.parser.utils import get_text
 from ragflow.rag.app.qa import Excel
 from ragflow.rag.nlp import rag_tokenizer
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 def beAdoc(d, q, a, eng, row_num=-1):

@@ -23,13 +23,14 @@ from typing import Tuple
 import jinja2
 import json_repair
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils import hash_str2int
 from ragflow.rag.prompts.prompt_template import load_prompt
 from ragflow.rag.settings import TAG_FLD
 from ragflow.rag.utils import encoder, num_tokens_from_string
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -104,10 +105,11 @@ def message_fit_in(msg, max_length=4000):
 
 
 def kb_prompt(kbinfos, max_tokens, hash_id=False):
-    # ========== Change by Judy ==========
+    # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
     from ragflow.api.db.services.document_service import DocumentService
 
-    # ========== Change by Judy ==========
+    # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
     knowledges = [get_value(ck, "content", "content_with_weight") for ck in kbinfos["chunks"]]
     kwlg_len = len(knowledges)
@@ -120,7 +122,7 @@ def kb_prompt(kbinfos, max_tokens, hash_id=False):
         chunks_num += 1
         if max_tokens * 0.97 < used_token_count:
             knowledges = knowledges[:i]
-            ragflow_logger.warning(f"Not all the retrieval into prompt: {len(knowledges)}/{kwlg_len}")  # ========== Change by Judy ==========
+            ragflow_logger.warning(f"Not all the retrieval into prompt: {len(knowledges)}/{kwlg_len}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             break
 
     docs = DocumentService.get_by_ids([get_value(ck, "doc_id", "document_id") for ck in kbinfos["chunks"][:chunks_num]])
@@ -211,12 +213,13 @@ def question_proposal(chat_mdl, content, topn=3):
 
 
 def full_question(tenant_id=None, llm_id=None, messages=[], language=None, chat_mdl=None):
-    # ========== Change by Judy ==========
+    # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
     from ragflow.api.db import LLMType
     from ragflow.api.db.services.llm_service import LLMBundle
     from ragflow.api.db.services.tenant_llm_service import TenantLLMService
 
-    # ========== Change by Judy ==========
+    # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
     if not chat_mdl:
         if TenantLLMService.llm_id2llm_type(llm_id) == "image2text":
@@ -248,12 +251,13 @@ def full_question(tenant_id=None, llm_id=None, messages=[], language=None, chat_
 
 
 def cross_languages(tenant_id, llm_id, query, languages=[]):
-    # ========== Change by Judy ==========
+    # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
     from ragflow.api.db import LLMType
     from ragflow.api.db.services.llm_service import LLMBundle
     from ragflow.api.db.services.tenant_llm_service import TenantLLMService
 
-    # ========== Change by Judy ==========
+    # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
     if llm_id and TenantLLMService.llm_id2llm_type(llm_id) == "image2text":
         chat_mdl = LLMBundle(tenant_id, LLMType.IMAGE2TEXT, llm_id)
@@ -300,7 +304,7 @@ def content_tagging(chat_mdl, content, all_tags, examples, topn=3):
             result = "{" + result.split("{")[1].split("}")[0] + "}"
             obj = json_repair.loads(result)
         except Exception as e:
-            ragflow_logger.exception(f"JSON parsing error: {result} -> {e}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"JSON parsing error: {result} -> {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise e
     res = {}
     for k, v in obj.items():
@@ -454,5 +458,5 @@ def gen_meta_filter(chat_mdl, meta_data:dict, query: str) -> list:
         assert isinstance(ans, list), ans
         return ans
     except Exception:
-        ragflow_logger.exception(f"Loading json failure: {ans}")  # ========== Change by Judy ==========
+        ragflow_logger.exception(f"Loading json failure: {ans}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     return []

@@ -23,13 +23,14 @@ import re
 import pandas as pd
 import requests
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db.services.knowledgebase_service import KnowledgebaseService
 from ragflow.deepdoc.parser.resume import refactor, step_one, step_two
 from ragflow.rag.nlp import rag_tokenizer
 from ragflow.rag.utils import rmSpace
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -78,7 +79,7 @@ def remote_call(filename, binary):
             resume = step_two.parse(resume)
             return resume
         except Exception:
-            ragflow_logger.exception("Resume parser has not been supported yet!")  # ========== Change by Judy ==========
+            ragflow_logger.exception("Resume parser has not been supported yet!")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     return {}
 
 
@@ -100,7 +101,7 @@ def chunk(filename, binary=None, callback=None, **kwargs):
         callback(-1, "Resume is not successfully parsed.")
         raise Exception("Resume parser remote call fail!")
     callback(0.6, "Done parsing. Chunking...")
-    ragflow_logger.debug("chunking resume: " + json.dumps(resume, ensure_ascii=False, indent=2))  # ========== Change by Judy ==========
+    ragflow_logger.debug("chunking resume: " + json.dumps(resume, ensure_ascii=False, indent=2))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     field_map = {
         "name_kwd": "姓名/名字",
@@ -172,7 +173,7 @@ def chunk(filename, binary=None, callback=None, **kwargs):
             resume[n] = rag_tokenizer.fine_grained_tokenize(resume[n])
         doc[n] = resume[n]
 
-    ragflow_logger.debug("chunked resume to " + str(doc))  # ========== Change by Judy ==========
+    ragflow_logger.debug("chunked resume to " + str(doc))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     KnowledgebaseService.update_parser_config(
         kwargs["kb_id"], {"field_map": field_map})
     return [doc]

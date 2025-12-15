@@ -31,7 +31,8 @@ from opensearchpy import (
     UpdateByQuery,
 )
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.rag import settings
 from ragflow.rag.nlp import is_english, rag_tokenizer
@@ -46,7 +47,7 @@ from ragflow.rag.utils.doc_store_conn import (
     OrderByExpr,
 )
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 ATTEMPT_TIME = 2
 

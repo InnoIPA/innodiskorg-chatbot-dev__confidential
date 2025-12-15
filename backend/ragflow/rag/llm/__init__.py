@@ -75,10 +75,10 @@ TTSModel = globals().get("TTSModel", {})
 MODULE_MAPPING = {
     "chat_model": ChatModel,
     "cv_model": CvModel,
-    # "embedding_model": EmbeddingModel,      # unused  # ========== Change by Judy ==========
-    # "rerank_model": RerankModel,            # unused  # ========== Change by Judy ==========
-    # "sequence2txt_model": Seq2txtModel,     # unused  # ========== Change by Judy ==========
-    # "tts_model": TTSModel,                  # unused  # ========== Change by Judy ==========
+    # "embedding_model": EmbeddingModel,      # unused  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "rerank_model": RerankModel,            # unused  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "sequence2txt_model": Seq2txtModel,     # unused  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+    # "tts_model": TTSModel,                  # unused  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 }
 
 package_name = __name__

@@ -21,11 +21,12 @@ from io import BytesIO
 
 from azure.storage.blob import ContainerClient
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag import settings
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -52,7 +53,7 @@ class RAGFlowAzureSasBlob:
         try:
             self.conn = ContainerClient.from_container_url(self.container_url + "?" + self.sas_token)
         except Exception:
-            ragflow_logger.exception("Fail to connect %s " % self.container_url)  # ========== Change by Judy ==========
+            ragflow_logger.exception("Fail to connect %s " % self.container_url)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __close__(self):
         del self.conn
@@ -67,7 +68,7 @@ class RAGFlowAzureSasBlob:
             try:
                 return self.conn.upload_blob(name=fnm, data=BytesIO(binary), length=len(binary))
             except Exception:
-                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
 
@@ -75,7 +76,7 @@ class RAGFlowAzureSasBlob:
         try:
             self.conn.delete_blob(fnm)
         except Exception:
-            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def get(self, bucket, fnm):
         for _ in range(1):
@@ -83,7 +84,7 @@ class RAGFlowAzureSasBlob:
                 r = self.conn.download_blob(fnm)
                 return r.read()
             except Exception:
-                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -92,7 +93,7 @@ class RAGFlowAzureSasBlob:
         try:
             return self.conn.get_blob_client(fnm).exists()
         except Exception:
-            ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return False
 
     def get_presigned_url(self, bucket, fnm, expires):
@@ -100,7 +101,7 @@ class RAGFlowAzureSasBlob:
             try:
                 return self.conn.get_presigned_url("GET", bucket, fnm, expires)
             except Exception:
-                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return

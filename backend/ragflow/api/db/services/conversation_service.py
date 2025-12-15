@@ -17,7 +17,8 @@ import json
 import time
 from uuid import uuid4
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import StatusEnum
 from ragflow.api.db.db_models import DB, Conversation
 from ragflow.api.db.services.api_service import API4ConversationService
@@ -26,7 +27,7 @@ from ragflow.api.db.services.dialog_service import DialogService, chat
 from ragflow.api.utils import get_uuid
 from ragflow.rag.prompts import chunks_format
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 
 class ConversationService(CommonService):

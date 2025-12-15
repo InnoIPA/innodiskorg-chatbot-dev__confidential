@@ -22,11 +22,12 @@ import re
 
 import numpy as np
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.file_utils import get_project_base_directory
 from ragflow.rag.nlp import rag_tokenizer
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -94,11 +95,11 @@ class Dealer:
         try:
             self.ne = json.load(open(os.path.join(fnm, "ner.json"), "r"))
         except Exception:
-            ragflow_logger.warning("Load ner.json FAIL!")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Load ner.json FAIL!")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         try:
             self.df = load_dict(os.path.join(fnm, "term.freq"))
         except Exception:
-            ragflow_logger.warning("Load term.freq FAIL!")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Load term.freq FAIL!")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def pretoken(self, txt, num=False, stpwd=True):
         patt = [

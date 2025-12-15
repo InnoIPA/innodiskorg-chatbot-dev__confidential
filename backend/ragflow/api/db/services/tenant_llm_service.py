@@ -17,7 +17,8 @@ import logging
 
 from langfuse import Langfuse
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.db import LLMType
 from ragflow.api.db.db_models import DB, LLMFactories, TenantLLM
@@ -33,7 +34,7 @@ from ragflow.rag.llm import (
     TTSModel,
 )
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -96,7 +97,7 @@ class TenantLLMService(CommonService):
                 return model_name, None
             return arr[0], arr[-1]
         except Exception as e:
-            ragflow_logger.exception(f"TenantLLMService.split_model_name_and_factory got exception: {e}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"TenantLLMService.split_model_name_and_factory got exception: {e}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return model_name, None
 
     @classmethod
@@ -190,7 +191,7 @@ class TenantLLMService(CommonService):
     def increase_usage(cls, tenant_id, llm_type, used_tokens, llm_name=None):
         e, tenant = TenantService.get_by_id(tenant_id)
         if not e:
-            ragflow_logger.error(f"Tenant not found: {tenant_id}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Tenant not found: {tenant_id}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return 0
 
         llm_map = {
@@ -204,7 +205,7 @@ class TenantLLMService(CommonService):
 
         mdlnm = llm_map.get(llm_type)
         if mdlnm is None:
-            ragflow_logger.error(f"LLM type error: {llm_type}")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"LLM type error: {llm_type}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return 0
 
         llm_name, llm_factory = TenantLLMService.split_model_name_and_factory(mdlnm)
@@ -216,7 +217,7 @@ class TenantLLMService(CommonService):
                 .execute()
             )
         except Exception:
-            ragflow_logger.exception("TenantLLMService.increase_usage got exception,Failed to update used_tokens for tenant_id=%s, llm_name=%s", tenant_id, llm_name)  # ========== Change by Judy ==========
+            ragflow_logger.exception("TenantLLMService.increase_usage got exception,Failed to update used_tokens for tenant_id=%s, llm_name=%s", tenant_id, llm_name)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return 0
 
         return num

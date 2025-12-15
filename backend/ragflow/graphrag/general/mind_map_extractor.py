@@ -24,7 +24,8 @@ from typing import Any
 import markdown_to_json
 import trio
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.graphrag.general.extractor import Extractor
 from ragflow.graphrag.general.mind_map_prompt import MIND_MAP_EXTRACTION_PROMPT
 from ragflow.graphrag.utils import (
@@ -35,7 +36,7 @@ from ragflow.graphrag.utils import (
 from ragflow.rag.llm.chat_model import Base as CompletionLLM
 from ragflow.rag.utils import num_tokens_from_string
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -188,6 +189,6 @@ class MindMapExtractor(Extractor):
         async with chat_limiter:
             response = await trio.to_thread.run_sync(lambda: self._chat(text, [{"role": "user", "content": "Output:"}], {}))
         response = re.sub(r"```[^\n]*", "", response)
-        ragflow_logger.debug(response)  # ========== Change by Judy ==========
-        ragflow_logger.debug(self._todict(markdown_to_json.dictify(response)))  # ========== Change by Judy ==========
+        ragflow_logger.debug(response)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
+        ragflow_logger.debug(self._todict(markdown_to_json.dictify(response)))  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         out_res.append(self._todict(markdown_to_json.dictify(response)))

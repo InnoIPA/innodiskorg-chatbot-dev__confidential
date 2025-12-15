@@ -28,11 +28,13 @@ from mcp.client.sse import sse_client
 from mcp.client.streamable_http import streamablehttp_client
 from mcp.types import CallToolResult, ListToolsResult, TextContent, Tool
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import MCPServerType
 from ragflow.rag.llm.chat_model import ToolCallSession
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
 from typing_extensions import override
 
 # ========== Add by Judy ==========
@@ -79,11 +81,11 @@ class MCPToolCallSession(ToolCallSession):
                     async with ClientSession(*stream) as client_session:
                         try:
                             await asyncio.wait_for(client_session.initialize(), timeout=5)
-                            ragflow_logger.info("client_session initialized successfully")  # ========== Change by Judy ==========
+                            ragflow_logger.info("client_session initialized successfully")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             await self._process_mcp_tasks(client_session)
                         except asyncio.TimeoutError:
                             msg = f"Timeout initializing client_session for server {self._mcp_server.id}"
-                            ragflow_logger.error(msg)  # ========== Change by Judy ==========
+                            ragflow_logger.error(msg)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             await self._process_mcp_tasks(None, msg)
             except Exception:
                 msg = "Connection failed (possibly due to auth error). Please check authentication settings first"
@@ -96,14 +98,14 @@ class MCPToolCallSession(ToolCallSession):
                     async with ClientSession(read_stream, write_stream) as client_session:
                         try:
                             await asyncio.wait_for(client_session.initialize(), timeout=5)
-                            ragflow_logger.info("client_session initialized successfully")  # ========== Change by Judy ==========
+                            ragflow_logger.info("client_session initialized successfully")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             await self._process_mcp_tasks(client_session)
                         except asyncio.TimeoutError:
                             msg = f"Timeout initializing client_session for server {self._mcp_server.id}"
-                            ragflow_logger.error(msg)  # ========== Change by Judy ==========
+                            ragflow_logger.error(msg)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                             await self._process_mcp_tasks(None, msg)
             except Exception as e:
-                ragflow_logger.exception(e)  # ========== Change by Judy ==========
+                ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 msg = "Connection failed (possibly due to auth error). Please check authentication settings first"
                 await self._process_mcp_tasks(None, msg)
 
@@ -117,7 +119,7 @@ class MCPToolCallSession(ToolCallSession):
             except asyncio.TimeoutError:
                 continue
 
-            ragflow_logger.debug(f"Got MCP task {mcp_task} arguments {arguments}")  # ========== Change by Judy ==========
+            ragflow_logger.debug(f"Got MCP task {mcp_task} arguments {arguments}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
             r: Any = None
 
@@ -177,10 +179,10 @@ class MCPToolCallSession(ToolCallSession):
             return future.result(timeout=timeout)
         except FuturesTimeoutError:
             msg = f"Timeout when fetching tools from MCP server: {self._mcp_server.id} (timeout={timeout})"
-            ragflow_logger.error(msg)  # ========== Change by Judy ==========
+            ragflow_logger.error(msg)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise RuntimeError(msg)
         except Exception:
-            ragflow_logger.exception(f"Error fetching tools from MCP server: {self._mcp_server.id}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Error fetching tools from MCP server: {self._mcp_server.id}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             raise
 
     @override
@@ -189,10 +191,10 @@ class MCPToolCallSession(ToolCallSession):
         try:
             return future.result(timeout=timeout)
         except FuturesTimeoutError:
-            ragflow_logger.error(f"Timeout calling tool '{name}' on MCP server: {self._mcp_server.id} (timeout={timeout})")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Timeout calling tool '{name}' on MCP server: {self._mcp_server.id} (timeout={timeout})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return f"Timeout calling tool '{name}' (timeout={timeout})."
         except Exception as e:
-            ragflow_logger.exception(f"Error calling tool '{name}' on MCP server: {self._mcp_server.id}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Error calling tool '{name}' on MCP server: {self._mcp_server.id}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return f"Error calling tool '{name}': {e}."
 
     async def close(self) -> None:
@@ -206,20 +208,20 @@ class MCPToolCallSession(ToolCallSession):
 
     def close_sync(self, timeout: float | int = 5) -> None:
         if not self._event_loop.is_running():
-            ragflow_logger.warning(f"Event loop already stopped for {self._mcp_server.id}")  # ========== Change by Judy ==========
+            ragflow_logger.warning(f"Event loop already stopped for {self._mcp_server.id}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return
 
         future = asyncio.run_coroutine_threadsafe(self.close(), self._event_loop)
         try:
             future.result(timeout=timeout)
         except FuturesTimeoutError:
-            ragflow_logger.error(f"Timeout while closing session for server {self._mcp_server.id} (timeout={timeout})")  # ========== Change by Judy ==========
+            ragflow_logger.error(f"Timeout while closing session for server {self._mcp_server.id} (timeout={timeout})")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         except Exception:
-            ragflow_logger.exception(f"Unexpected error during close_sync for {self._mcp_server.id}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Unexpected error during close_sync for {self._mcp_server.id}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def close_multiple_mcp_toolcall_sessions(sessions: list[MCPToolCallSession]) -> None:
-    ragflow_logger.info(f"Want to clean up {len(sessions)} MCP sessions")  # ========== Change by Judy ==========
+    ragflow_logger.info(f"Want to clean up {len(sessions)} MCP sessions")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     async def _gather_and_stop() -> None:
         try:
@@ -234,19 +236,19 @@ def close_multiple_mcp_toolcall_sessions(sessions: list[MCPToolCallSession]) -> 
     asyncio.run_coroutine_threadsafe(_gather_and_stop(), loop).result()
 
     thread.join()
-    ragflow_logger.info(f"{len(sessions)} MCP sessions has been cleaned up. {len(list(MCPToolCallSession._ALL_INSTANCES))} in global context.")  # ========== Change by Judy ==========
+    ragflow_logger.info(f"{len(sessions)} MCP sessions has been cleaned up. {len(list(MCPToolCallSession._ALL_INSTANCES))} in global context.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def shutdown_all_mcp_sessions():
     """Gracefully shutdown all active MCPToolCallSession instances."""
     sessions = list(MCPToolCallSession._ALL_INSTANCES)
     if not sessions:
-        ragflow_logger.info("No MCPToolCallSession instances to close.")  # ========== Change by Judy ==========
+        ragflow_logger.info("No MCPToolCallSession instances to close.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return
 
-    ragflow_logger.info(f"Shutting down {len(sessions)} MCPToolCallSession instances...")  # ========== Change by Judy ==========
+    ragflow_logger.info(f"Shutting down {len(sessions)} MCPToolCallSession instances...")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
     close_multiple_mcp_toolcall_sessions(sessions)
-    ragflow_logger.info("All MCPToolCallSession instances have been closed.")  # ========== Change by Judy ==========
+    ragflow_logger.info("All MCPToolCallSession instances have been closed.")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
 
 def mcp_tool_metadata_to_openai_tool(mcp_tool: Tool|dict) -> dict[str, Any]:

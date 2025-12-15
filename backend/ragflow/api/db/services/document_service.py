@@ -26,7 +26,8 @@ import trio
 import xxhash
 from peewee import fn
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api import settings
 from ragflow.api.constants import FILE_NAME_LEN_LIMIT, IMG_BASE64_PREFIX
 from ragflow.api.db import (
@@ -57,7 +58,7 @@ from ragflow.rag.utils.doc_store_conn import OrderByExpr
 from ragflow.rag.utils.redis_conn import REDIS_CONN
 from ragflow.rag.utils.storage_factory import STORAGE_IMPL
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -680,7 +681,7 @@ class DocumentService(CommonService):
                 cls.update_by_id(d["id"], info)
             except Exception as e:
                 if str(e).find("'0'") < 0:
-                    ragflow_logger.exception("fetch task exception")  # ========== Change by Judy ==========
+                    ragflow_logger.exception("fetch task exception")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     @classmethod
     @DB.connection_context()
@@ -854,7 +855,7 @@ def doc_upload_and_parse(conversation_id, file_objs, user_id):
                     "knowledge_graph_kwd": "mind_map"
                 })
             except Exception as e:
-                ragflow_logger.exception("Mind map generation error")  # ========== Change by Judy ==========
+                ragflow_logger.exception("Mind map generation error")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         vects = embedding(doc_id, [c["content_with_weight"] for c in cks])
         assert len(cks) == len(vects)

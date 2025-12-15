@@ -848,7 +848,7 @@ def save_docs_to_vector_db(
                 raise ValueError(ERROR_MESSAGES.DUPLICATE_CONTENT)
 
     if split:
-        # ========== Change by Judy ==========
+        # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
         if use_ragflow:
             pass  # Do nothing
@@ -876,7 +876,7 @@ def save_docs_to_vector_db(
 
             docs = text_splitter.split_documents(docs)
 
-        # ========== Change by Judy ==========
+        # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
     if len(docs) == 0:
         raise ValueError(ERROR_MESSAGES.EMPTY_CONTENT)
@@ -1139,14 +1139,14 @@ def process_file(
                     )
                 ]
 
-            # ========== Change by Judy ==========
+            # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
             if form_data.use_ragflow:
                 text_content = "<cut>".join([doc.page_content for doc in docs])
             else:
                 text_content = " ".join([doc.page_content for doc in docs])
 
-            # ========== Change by Judy ==========
+            # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
         log.debug(f"text_content: {text_content}")
         Files.update_file_data_by_id(

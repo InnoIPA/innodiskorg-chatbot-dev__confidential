@@ -21,11 +21,12 @@ import time
 from azure.identity import AzureAuthorityHosts, ClientSecretCredential
 from azure.storage.filedatalake import FileSystemClient
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag import settings
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -56,7 +57,7 @@ class RAGFlowAzureSpnBlob:
             credentials = ClientSecretCredential(tenant_id=self.tenant_id, client_id=self.client_id, client_secret=self.secret, authority=AzureAuthorityHosts.AZURE_CHINA)
             self.conn = FileSystemClient(account_url=self.account_url, file_system_name=self.container_name, credential=credentials)
         except Exception:
-            ragflow_logger.exception("Fail to connect %s" % self.account_url)  # ========== Change by Judy ==========
+            ragflow_logger.exception("Fail to connect %s" % self.account_url)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __close__(self):
         del self.conn
@@ -75,7 +76,7 @@ class RAGFlowAzureSpnBlob:
                 f.append_data(binary, offset=0, length=len(binary))
                 return f.flush_data(len(binary))
             except Exception:
-                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
 
@@ -83,7 +84,7 @@ class RAGFlowAzureSpnBlob:
         try:
             self.conn.delete_file(fnm)
         except Exception:
-            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail rm {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def get(self, bucket, fnm):
         for _ in range(1):
@@ -92,7 +93,7 @@ class RAGFlowAzureSpnBlob:
                 r = client.download_file()
                 return r.read()
             except Exception:
-                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -102,7 +103,7 @@ class RAGFlowAzureSpnBlob:
             client = self.conn.get_file_client(fnm)
             return client.exists()
         except Exception:
-            ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail put {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         return False
 
     def get_presigned_url(self, bucket, fnm, expires):
@@ -110,7 +111,7 @@ class RAGFlowAzureSpnBlob:
             try:
                 return self.conn.get_presigned_url("GET", bucket, fnm, expires)
             except Exception:
-                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"fail get {bucket}/{fnm}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return

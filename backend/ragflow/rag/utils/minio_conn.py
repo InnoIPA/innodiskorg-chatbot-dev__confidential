@@ -21,11 +21,12 @@ from io import BytesIO
 from minio import Minio
 from minio.error import S3Error
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.rag import settings
 from ragflow.rag.utils import singleton
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -55,7 +56,7 @@ class RAGFlowMinio:
                               )
         except Exception:
             ragflow_logger.exception(
-                "Fail to connect %s " % settings.MINIO["host"])  # ========== Change by Judy ==========
+                "Fail to connect %s " % settings.MINIO["host"])  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def __close__(self):
         del self.conn
@@ -83,7 +84,7 @@ class RAGFlowMinio:
                                          )
                 return r
             except Exception:
-                ragflow_logger.exception(f"Fail to put {bucket}/{fnm}:")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail to put {bucket}/{fnm}:")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
 
@@ -91,7 +92,7 @@ class RAGFlowMinio:
         try:
             self.conn.remove_object(bucket, fnm)
         except Exception:
-            ragflow_logger.exception(f"Fail to remove {bucket}/{fnm}:")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail to remove {bucket}/{fnm}:")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
     def get(self, bucket, filename):
         for _ in range(1):
@@ -99,7 +100,7 @@ class RAGFlowMinio:
                 r = self.conn.get_object(bucket, filename)
                 return r.read()
             except Exception:
-                ragflow_logger.exception(f"Fail to get {bucket}/{filename}")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail to get {bucket}/{filename}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -116,7 +117,7 @@ class RAGFlowMinio:
             if e.code in ["NoSuchKey", "NoSuchBucket", "ResourceNotFound"]:
                 return False
         except Exception:
-            ragflow_logger.exception(f"obj_exist {bucket}/{filename} got exception")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"obj_exist {bucket}/{filename} got exception")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
             return False
 
     def get_presigned_url(self, bucket, fnm, expires):
@@ -124,7 +125,7 @@ class RAGFlowMinio:
             try:
                 return self.conn.get_presigned_url("GET", bucket, fnm, expires)
             except Exception:
-                ragflow_logger.exception(f"Fail to get_presigned {bucket}/{fnm}:")  # ========== Change by Judy ==========
+                ragflow_logger.exception(f"Fail to get_presigned {bucket}/{fnm}:")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 self.__open__()
                 time.sleep(1)
         return
@@ -137,4 +138,4 @@ class RAGFlowMinio:
                     self.conn.remove_object(bucket, obj.object_name)
                 self.conn.remove_bucket(bucket)
         except Exception:
-            ragflow_logger.exception(f"Fail to remove bucket {bucket}")  # ========== Change by Judy ==========
+            ragflow_logger.exception(f"Fail to remove bucket {bucket}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<

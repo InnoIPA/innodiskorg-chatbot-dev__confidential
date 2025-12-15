@@ -23,7 +23,8 @@ from typing import Callable
 import networkx as nx
 import trio
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.utils.api_utils import timeout
 from ragflow.graphrag.general.graph_prompt import SUMMARIZE_DESCRIPTIONS_PROMPT
 from ragflow.graphrag.utils import (
@@ -41,7 +42,7 @@ from ragflow.rag.llm.chat_model import Base as CompletionLLM
 from ragflow.rag.prompts import message_fit_in
 from ragflow.rag.utils import truncate
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 # ========== Add by Judy ==========
 # RAGFlow logger
@@ -85,7 +86,7 @@ class Extractor:
                     raise Exception(response)
                 set_llm_cache(self._llm.llm_name, system, response, history, gen_conf)
             except Exception as e:
-                ragflow_logger.exception(e)  # ========== Change by Judy ==========
+                ragflow_logger.exception(e)  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
                 if attempt == 2:
                     raise
 
@@ -141,7 +142,7 @@ class Extractor:
         if callback:
             callback(msg=f"Entities and relationships extraction done, {len(maybe_nodes)} nodes, {len(maybe_edges)} edges, {sum_token_count} tokens, {now - start_ts:.2f}s.")
         start_ts = now
-        ragflow_logger.info("Entities merging...")  # ========== Change by Judy ==========
+        ragflow_logger.info("Entities merging...")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         all_entities_data = []
         async with trio.open_nursery() as nursery:
             for en_nm, ents in maybe_nodes.items():
@@ -151,7 +152,7 @@ class Extractor:
             callback(msg=f"Entities merging done, {now - start_ts:.2f}s.")
 
         start_ts = now
-        ragflow_logger.info("Relationships merging...")  # ========== Change by Judy ==========
+        ragflow_logger.info("Relationships merging...")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         all_relationships_data = []
         async with trio.open_nursery() as nursery:
             for (src, tgt), rels in maybe_edges.items():
@@ -161,12 +162,12 @@ class Extractor:
             callback(msg=f"Relationships merging done, {now - start_ts:.2f}s.")
 
         if not len(all_entities_data) and not len(all_relationships_data):
-            ragflow_logger.warning("Didn't extract any entities and relationships, maybe your LLM is not working")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Didn't extract any entities and relationships, maybe your LLM is not working")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         if not len(all_entities_data):
-            ragflow_logger.warning("Didn't extract any entities")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Didn't extract any entities")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         if not len(all_relationships_data):
-            ragflow_logger.warning("Didn't extract any relationships")  # ========== Change by Judy ==========
+            ragflow_logger.warning("Didn't extract any relationships")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
 
         return all_entities_data, all_relationships_data
 
@@ -246,7 +247,7 @@ class Extractor:
             language=self._language,
         )
         use_prompt = prompt_template.format(**context_base)
-        ragflow_logger.info(f"Trigger summary: {entity_or_relation_name}")  # ========== Change by Judy ==========
+        ragflow_logger.info(f"Trigger summary: {entity_or_relation_name}")  # >>>>>>>>>> Changed by Judy <<<<<<<<<<
         async with chat_limiter:
             summary = await trio.to_thread.run_sync(self._chat, "", [{"role": "user", "content": use_prompt}])
         return summary

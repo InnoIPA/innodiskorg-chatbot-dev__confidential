@@ -20,14 +20,15 @@ import re
 import numpy as np
 from PIL import Image
 
-# ========== Change by Judy ==========
+# Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
 from ragflow.api.db import LLMType
 from ragflow.api.db.services.llm_service import LLMBundle
 from ragflow.deepdoc.vision import OCR
 from ragflow.rag.nlp import rag_tokenizer, tokenize
 from ragflow.rag.utils import clean_markdown_block
 
-# ========== Change by Judy ==========
+# <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
 ocr = OCR()
 
