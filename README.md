@@ -16,17 +16,15 @@ https://docs.openwebui.com/getting-started/advanced-topics/development
 cd backend
 ```
 
-
-
 設定開發時用的URL,允許後端可以傳送資料的URL在此行
 再將此行附加到dev.sh檔案內
 ```
-export CORS_ALLOW_ORIGIN="http://localhost:5173;http://localhost:8080;http://10.204.16.57:5173"
+export CORS_ALLOW_ORIGIN="http://localhost:5173;http://localhost:8080;http://10.204.16.67:5173"
 ```
 
 另一個地方可以設定在./backend/open_webui/config.py,調整其中的CORS_ALLOW_ORIGIN內容
 ```
-CORS_ALLOW_ORIGIN = os.environ.get("CORS_ALLOW_ORIGIN", "http://localhost:5173;http://127.0.0.1:5173").split(";")
+CORS_ALLOW_ORIGIN = os.environ.get("CORS_ALLOW_ORIGIN", "http://localhost:5173;http://127.0.0.1:5173;http://10.204.16.67:5173").split(";")
 ```
 
 安裝後端服務伺服器
@@ -62,7 +60,6 @@ node版本要大於22.10.0
 ```
 npm install
 ```
-執行啟動command
 
 開啟vite.config.ts,加入如下設定
 ```
@@ -77,6 +74,7 @@ server: {
 }
 ```
 
+執行啟動command
 ```
 npm run dev
 ```
@@ -89,10 +87,33 @@ http://localhost:5173
 
 
 ## 完成版本目標後的注意事項
+
 ### Step 1:
-執行run.sh整合前後端產生docker image
+配合CI/CD,新進版號需要修改CHANGELOG.md
+版本與日期格式要如之前格式
+```
+## [0.4.13] - 2025-12-15
+
+### Added 
+
+- **RAG flow UI**
+```
+package.json版本也可配合新版做調整
+```
+{
+    "name": "open-webui",
+	"version": "0.4.13",
+    ...
+}
+```
+git remote branch要新增branch
+例如`dev_frontend_0.4.13`
+push後再發PR merge到dev版本內
 
 ### Step 2:
+執行run.sh整合前後端產生docker image
+
+### Step 3:
 因為這是前後端整合的專案
 特別要注意github push時要先建立一個新的branch
 例如dev_frontend_0.4.12再推上去
