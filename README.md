@@ -16,10 +16,7 @@ https://docs.openwebui.com/getting-started/advanced-topics/development
 cd backend
 ```
 
-安裝相關套件
-```
-pip install -r requirements.txt -U
-```
+
 
 設定開發時用的URL,允許後端可以傳送資料的URL在此行
 再將此行附加到dev.sh檔案內
@@ -30,6 +27,24 @@ export CORS_ALLOW_ORIGIN="http://localhost:5173;http://localhost:8080;http://10.
 另一個地方可以設定在./backend/open_webui/config.py,調整其中的CORS_ALLOW_ORIGIN內容
 ```
 CORS_ALLOW_ORIGIN = os.environ.get("CORS_ALLOW_ORIGIN", "http://localhost:5173;http://127.0.0.1:5173").split(";")
+```
+
+安裝後端服務伺服器
+```
+sudo pip install uvicorn
+```
+
+安裝python3.11並確認使用3.11
+```
+sudo apt install python3.11 python3.11-venv
+python3.11 -m venv venv
+source venv/bin/activate
+python --version
+```
+
+安裝相關套件
+```
+pip install -r requirements.txt -U
 ```
 
 
@@ -47,6 +62,20 @@ http://localhost:8080/docs
 npm install
 ```
 執行啟動command
+
+開啟vite.config.ts,加入如下設定
+```
+server: {
+    watch: {
+        ignored: [
+            '**/venv/**',
+            '**/backend/venv/**',
+            '**/.venv/**'
+        ]
+    }
+}
+```
+
 ```
 npm run dev
 ```
