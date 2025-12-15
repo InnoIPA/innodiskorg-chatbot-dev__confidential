@@ -1142,7 +1142,7 @@ def process_file(
             # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
             if form_data.use_ragflow:
-                text_content = "<cut>".join([doc.page_content for doc in docs])
+                text_content = json.dumps([{idx + 1: doc.page_content} for idx, doc in enumerate(docs)])
             else:
                 text_content = " ".join([doc.page_content for doc in docs])
 
