@@ -340,7 +340,11 @@ class ContentForm(BaseModel):
 
 @router.post("/{id}/data/content/update")
 async def update_file_data_content_by_id(
-    request: Request, id: str, form_data: ContentForm, user=Depends(get_verified_user)
+    request: Request,
+    id: str,
+    form_data: ContentForm,
+    user=Depends(get_verified_user),
+    use_ragflow: bool = Query(False),  # >>>>>>>>>> Added by Judy <<<<<<<<<<
 ):
     file = Files.get_file_by_id(id)
 
@@ -356,17 +360,37 @@ async def update_file_data_content_by_id(
         or has_access_to_file(id, "write", user)
     ):
         try:
-            process_file(
-                request,
-                ProcessFileForm(file_id=id, content=form_data.content),
-                user=user,
+            # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
+            form_data = ProcessFileForm(
+                file_id=id,
+                content=form_data.content,
+                use_ragflow=use_ragflow,
             )
+            process_result = process_file(request, form_data, user=user)
+
+            # <<<<<<<<<<<<<<<<<<<< Changed by Judy
+
             file = Files.get_file_by_id(id=id)
+
+            # Added by Judy >>>>>>>>>>>>>>>>>>>>
+
+            # Add RAGFlow results to the response if RAGFlow is used
+            if use_ragflow and process_result and isinstance(process_result, dict):
+                rag_res = process_result.get("ragflow_results", [])
+                existing_data = file.data or {}
+                merged_data = {**existing_data, "ragflow_results": rag_res}
+                file.data = merged_data
+
+            from ragflow.run_pdf import print_message
+            print_message("/files/\{id\}/data/content/update/", [vars(file)])
+
+            # <<<<<<<<<<<<<<<<<<<< Added by Judy
         except Exception as e:
             log.exception(e)
             log.error(f"Error processing file: {file.id}")
 
-        return {"content": file.data.get("content", "")}
+        return vars(file)
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

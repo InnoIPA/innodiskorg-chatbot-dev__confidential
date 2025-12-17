@@ -999,18 +999,71 @@ def process_file(
                 # Audio file upload pipeline
                 pass
 
-            docs = [
-                Document(
-                    page_content=form_data.content.replace("<br/>", "\n"),
-                    metadata={
-                        **file.meta,
-                        "name": file.filename,
-                        "created_by": file.user_id,
-                        "file_id": file.id,
-                        "source": file.filename,
-                    },
-                )
-            ]
+            # Added by Judy >>>>>>>>>>>>>>>>>>>>
+
+            # If `use_ragflow` is True, update `chunk_info.json`
+            if form_data.use_ragflow:
+                from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
+
+                json_dir = IMAGE_DIR / f"{file.id}"
+                json_path = json_dir / CHUNK_INFO_FILE
+                if not json_path.is_file():
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail=ERROR_MESSAGES.NOT_FOUND,
+                    )
+
+                # Get chunks' information
+                with json_path.open("r", encoding="utf-8") as f:
+                    chunks_info: list[dict] = json.load(f)
+
+                # Parse the updated content from JSON string
+                updated_content: dict = json.loads(form_data.content)
+
+                # Update each chunk's text according to its corresponding image index
+                for idx, chunk in enumerate(chunks_info):
+                    img_idx = Path(chunk["image_path"]).stem
+                    img_text = f"{updated_content[img_idx]}".replace("<br/>", "\n")
+                    chunks_info[idx]["text"] = img_text
+
+                # Write back to `chunk_info.json`
+                with json_path.open("w", encoding="utf-8") as f:
+                    json.dump(chunks_info, f, indent=4, ensure_ascii=False)
+
+            # <<<<<<<<<<<<<<<<<<<< Added by Judy
+
+            # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
+            # If `use_ragflow` is True, parse the JSON string
+            if form_data.use_ragflow:
+                docs = [
+                    Document(
+                        page_content=chunk["text"],
+                        metadata={
+                            **file.meta,
+                            "name": file.filename,
+                            "created_by": file.user_id,
+                            "file_id": file.id,
+                            "source": file.filename,
+                        },
+                    )
+                    for chunk in chunks_info
+                ]
+            else:
+                docs = [
+                    Document(
+                        page_content=form_data.content.replace("<br/>", "\n"),
+                        metadata={
+                            **file.meta,
+                            "name": file.filename,
+                            "created_by": file.user_id,
+                            "file_id": file.id,
+                            "source": file.filename,
+                        },
+                    )
+                ]
+
+            # <<<<<<<<<<<<<<<<<<<< Changed by Judy
 
             text_content = form_data.content
         elif form_data.collection_name:

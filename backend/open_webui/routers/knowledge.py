@@ -542,10 +542,23 @@ def update_file_from_knowledge_by_id(
 
         files = Files.get_files_by_ids(file_ids)
 
-        return KnowledgeFilesResponse(
+        # Changed by Judy >>>>>>>>>>>>>>>>>>>>
+
+        HelperFunction.add_ragflow_results(files)
+
+        knowledge_files = KnowledgeFilesResponse(
             **knowledge.model_dump(),
             files=files,
         )
+
+        HelperFunction.print_knowledge_response(
+            "/knowledge/\{id\}/file/update/",
+            knowledge_files,
+        )
+
+        return knowledge_files
+
+        # <<<<<<<<<<<<<<<<<<<< Changed by Judy
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
