@@ -1141,8 +1141,14 @@ def process_file(
 
             # Changed by Judy >>>>>>>>>>>>>>>>>>>>
 
-            if form_data.use_ragflow:
-                text_content = json.dumps([{idx + 1: doc.page_content} for idx, doc in enumerate(docs)])
+            if form_data.use_ragflow and json_entries:
+                # Only accept `json_entries` is not empty and not None
+                text_content_dict = {}
+                for entry in json_entries:
+                    img_idx = Path(entry["image_path"]).stem
+                    img_text = f"{entry['text']}"
+                    text_content_dict[img_idx] = img_text
+                text_content = json.dumps(text_content_dict)
             else:
                 text_content = " ".join([doc.page_content for doc in docs])
 
