@@ -135,5 +135,6 @@ push後再發PR merge到dev版本內
 ```
 /backend/data/webui.db
 ```
-
+連接local的ollama服務時,如果用docker
+localhost 要改為 host.docker.internal
 
