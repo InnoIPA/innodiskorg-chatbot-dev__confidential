@@ -9,7 +9,18 @@ https://docs.openwebui.com/getting-started/advanced-topics/development
 
 ## 開發時的設定
 
-### Step 1:
+### Stop 1:
+Ollama的安裝
+```
+docker run -d \
+  --name ollama \
+  --gpus all \
+  -p 11434:11434 \
+  -v ollama:/root/.ollama \
+  ollama/ollama
+```
+
+### Step 2:
 啟動後端:
 進入backend Folder
 ```
@@ -53,7 +64,7 @@ sh dev.sh
 之後開啟Browser輸入網址,會有後端的SwggerAPI文件網頁
 http://localhost:8080/docs
 
-### Step 2:
+### Step 3:
 啟動前端:
 node版本要大於22.10.0
 於專案根目錄下安裝套件
