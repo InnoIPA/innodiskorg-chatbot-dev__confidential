@@ -130,4 +130,10 @@ push後再發PR merge到dev版本內
 例如dev_frontend_0.4.12再推上去
 之後再整併到dev版本
 
+### Note:
+如果要清除之前的所有設定可以刪除db檔案
+```
+/backend/data/webui.db
+```
+
 
