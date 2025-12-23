@@ -616,3 +616,108 @@ async def delete_file_by_id(id: str, user=Depends(get_verified_user)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=ERROR_MESSAGES.NOT_FOUND,
         )
+
+
+# Added by Judy >>>>>>>>>>>>>>>>>>>>
+
+
+#########################################
+# Get File Chunk Image By Image Path
+#########################################
+
+
+from open_webui.models.users import UserModel
+
+# Media-type mapping
+MT_MAPPING = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".png": "image/png",
+    ".webp": "image/webp",
+}
+
+
+@router.get("/images/{image_path:path}")  # Add `:path` to tell FastAPI the path includes sub-directories
+async def get_chunk_image_by_path(
+    image_path: str,
+    user: UserModel = Depends(get_verified_user),
+    image_max_length: int | None = Query(None),
+    reading_size: int = Query(4096),
+) -> StreamingResponse:
+    """
+    Return a chunk image via StreamingResponse for browser rendering.
+
+    Args:
+        image_path (str): The chunk image path.
+        user (UserModel): The user will be verified.
+        image_max_length (int, optional): The maximum image side length. Default is `None`. Least is `32`.
+        reading_size (int): The size of each reading. Default is `4096` bytes. Least is `1`.
+
+    Returns:
+        streaming (StreamingResponse): The streaming of a chunk image.
+
+    Raises:
+        HTTPException (400): 
+            - If `image_max_length` is less than 32.
+            - If `reading_size` is less than or equal to 0.
+            - If the chunk image type is not supported.
+        HTTPException (404): 
+            - If the chunk image path is not found.
+            - If the file which chunk images from is not found.
+            - If the user doesn't exist or is prohibited from accessing.
+        HTTPException (500): 
+            - If there is any error occurring.
+    """
+
+    try:
+        fid = Path(image_path).parent.name
+        file = Files.get_file_by_id(fid)
+
+        if not file:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=ERROR_MESSAGES.NOT_FOUND,
+            )
+
+        if (
+            file.user_id == user.id
+            or user.role == "admin"
+            or has_access_to_file(id, "read", user)
+        ):
+            from ragflow.chunk_images import get_image_iterator_by_path
+            from ragflow.files import get_file_type
+
+            # If we don't use `await`, get `CoroutineType`
+            # However, `StreamingResponse` only accepts `Iterator` and `AsyncIterator`
+            iterator = await get_image_iterator_by_path(image_path, image_max_length, reading_size)
+            media_type = MT_MAPPING[get_file_type(image_path)]
+            headers = {
+                # Inline display in browser; browser will render inside <img>
+                "Content-Disposition": f'inline; filename="{fid}_{Path(image_path).name}"',
+                # If the chunk image is private and needs to log in, it is recommended to use `private`
+                "Cache-Control": "private, max-age=3600",
+            }
+
+            return StreamingResponse(iterator, media_type=media_type, headers=headers)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=ERROR_MESSAGES.NOT_FOUND,
+            )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e),
+        )
+    except FileNotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e),
+        )
+
+# <<<<<<<<<<<<<<<<<<<< Added by Judy
