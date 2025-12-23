@@ -1141,7 +1141,7 @@ def process_file(
                     # print_message("new_docs", docs)
 
                     # Also, save chunks' texts and image paths in a JSON file
-                    from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR, ROOT_DIR
+                    from ragflow.constants import CHUNK_INFO_FILE, IMAGE_DIR
 
                     json_dir = IMAGE_DIR / f"{file.id}"
                     json_path = json_dir / CHUNK_INFO_FILE
@@ -1149,7 +1149,7 @@ def process_file(
                         {
                             "text": chunk.get("content_with_weight", ""),
                             "image_path": (
-                                str(Path(chunk["image_path"]).relative_to(ROOT_DIR))
+                                str(Path(chunk["image_path"]).relative_to(IMAGE_DIR))
                                 if "image_path" in chunk.keys()
                                 else ""
                             ),
